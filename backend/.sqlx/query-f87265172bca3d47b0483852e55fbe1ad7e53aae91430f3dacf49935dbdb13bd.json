@@ -1,0 +1,20 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\n            INSERT INTO fhir_observations \n                (sensor_reading_id, resource_type, resource_data, fhir_id, patient_id, loinc_code, observation_category)\n            VALUES ($1, $2, $3, $4, $5, $6, $7)\n            ",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Varchar",
+        "Jsonb",
+        "Varchar",
+        "Varchar",
+        "Varchar",
+        "Varchar"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "f87265172bca3d47b0483852e55fbe1ad7e53aae91430f3dacf49935dbdb13bd"
+}

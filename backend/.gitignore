@@ -1,0 +1,41 @@
+# Rust build artifacts
+/target/
+**/*.rs.bk
+*.pdb
+
+# Cargo lock file (commit for binaries, ignore for libraries)
+Cargo.lock
+
+# Environment variables and secrets
+.env
+.env.local
+.env.*.local
+
+# Database files
+*.db
+*.db-shm
+*.db-wal
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Log files
+*.log
+
+# Test coverage reports
+tarpaulin-report.html
+cobertura.xml
+
+# Backup files
+*.bak
+*.backup
+
+# OS files
+Thumbs.db
+.Spotlight-V100
+.Trashes

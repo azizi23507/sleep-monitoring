@@ -1,0 +1,32 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\n        SELECT \n            sleep_date,\n            quality_score,\n            classification\n        FROM sleep_records\n        ORDER BY sleep_date DESC\n        LIMIT 1\n        ",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "sleep_date",
+        "type_info": "Date"
+      },
+      {
+        "ordinal": 1,
+        "name": "quality_score",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 2,
+        "name": "classification",
+        "type_info": "Varchar"
+      }
+    ],
+    "parameters": {
+      "Left": []
+    },
+    "nullable": [
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "b83c73dff29c9cd67082481728cb2d3592206b0e85457624c726b3483b9de57d"
+}

@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sleep Monitoring System</title>
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/styles.css">
+    
+    <!-- Chart.js for visualization -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <h1>Sleep Monitoring System</h1>
+        <div class="connection-status">
+            <span id="status-indicator" class="status-dot disconnected"></span>
+            <span id="status-text">Disconnected</span>
+        </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <nav class="tabs">
+        <button class="tab-button active" data-tab="dashboard">Live Dashboard</button>
+        <button class="tab-button" data-tab="analysis">Sleep Analysis</button>
+        <button class="tab-button" data-tab="standards">Standards Reference</button>
+    </nav>
+
+    <!-- Dashboard Tab -->
+    <div id="dashboard-tab" class="tab-content active">
+        <div class="container">
+            <!-- Current Values Section -->
+            <section class="current-values">
+                <h2>Current Readings</h2>
+                <div class="values-grid">
+                    <div class="value-card">
+                        <h3>Temperature</h3>
+                        <p class="value" id="current-temp">--</p>
+                        <p class="unit">°C</p>
+                        <p class="optimal">Optimal: 18-22°C</p>
+                    </div>
+                    <div class="value-card">
+                        <h3>Humidity</h3>
+                        <p class="value" id="current-humidity">--</p>
+                        <p class="unit">%</p>
+                        <p class="optimal">Optimal: 40-60%</p>
+                    </div>
+                    <div class="value-card">
+                        <h3>Sound Level</h3>
+                        <p class="value" id="current-sound">--</p>
+                        <p class="unit">dB</p>
+                        <p class="optimal">Quiet: &lt;40dB</p>
+                    </div>
+                    <div class="value-card">
+                        <h3>Motion</h3>
+                        <p class="value" id="current-motion">--</p>
+                        <p class="unit"></p>
+                        <p class="optimal">Fewer = Better</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Charts Section -->
+            <section class="charts">
+                <h2>Real-Time Trends (Last 100 Readings)</h2>
+                
+                <div class="chart-container">
+                    <h3>Temperature Over Time</h3>
+                    <canvas id="temp-chart"></canvas>
+                </div>
+
+                <div class="chart-container">
+                    <h3>Humidity Over Time</h3>
+                    <canvas id="humidity-chart"></canvas>
+                </div>
+
+                <div class="chart-container">
+                    <h3>Sound Level Over Time</h3>
+                    <canvas id="sound-chart"></canvas>
+                </div>
+
+                <div class="chart-container">
+                    <h3>Motion Events</h3>
+                    <canvas id="motion-chart"></canvas>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- Analysis Tab -->
+    <div id="analysis-tab" class="tab-content">
+        <div class="container">
+            <section class="analysis-section">
+                <h2>Sleep Quality Analysis</h2>
+                <p class="info-text">ML-analyzed sleep quality results based on environmental factors</p>
+
+                <!-- Latest Sleep Quality -->
+                <div class="latest-quality">
+                    <h3>Latest Sleep Quality</h3>
+                    <div id="latest-result" class="result-card">
+                        <p class="loading">Loading...</p>
+                    </div>
+                </div>
+
+                <!-- Recent Sleep Records -->
+                <div class="recent-records">
+                    <h3>Recent Sleep Records (Last 7 Nights)</h3>
+                    <div id="records-list" class="records-grid">
+                        <p class="loading">Loading...</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- Standards Reference Tab -->
+    <div id="standards-tab" class="tab-content">
+        <div class="container">
+            <section class="standards-section">
+                <h2>Sleep Quality Standards</h2>
+                <p class="info-text">Scientific standards used for sleep quality assessment</p>
+
+                <!-- Temperature Standards -->
+                <div class="standard-card">
+                    <h3>Temperature (18-22°C)</h3>
+                    <div class="standard-details">
+                        <p><strong>Optimal Range:</strong> 18-22°C (64-72°F)</p>
+                        <p><strong>Impact:</strong> Core body temperature drops during sleep. Cool room temperature facilitates this natural process.</p>
+                        <div class="scoring">
+                            <p><strong>Scoring:</strong></p>
+                            <ul>
+                                <li>18-22°C: Optimal (full points)</li>
+                                <li>16-18°C or 22-24°C: Acceptable (reduced points)</li>
+                                <li>&lt;16°C or &gt;24°C: Poor (minimal points)</li>
+                            </ul>
+                        </div>
+                        <div class="references">
+                            <p><strong>References:</strong></p>
+                            <ul>
+                                <li><a href="https://www.sleepfoundation.org/bedroom-environment/best-temperature-for-sleep" target="_blank">National Sleep Foundation - Best Temperature for Sleep</a></li>
+                                <li>Okamoto-Mizuno, K., & Mizuno, K. (2012). Effects of thermal environment on sleep and circadian rhythm. Journal of Physiological Anthropology, 31(1), 14.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Humidity Standards -->
+                <div class="standard-card">
+                    <h3>Humidity (40-60%)</h3>
+                    <div class="standard-details">
+                        <p><strong>Optimal Range:</strong> 40-60%</p>
+                        <p><strong>Impact:</strong> Proper humidity prevents dry airways and promotes comfortable breathing during sleep.</p>
+                        <div class="scoring">
+                            <p><strong>Scoring:</strong></p>
+                            <ul>
+                                <li>40-60%: Optimal (full points)</li>
+                                <li>30-40% or 60-70%: Acceptable (reduced points)</li>
+                                <li>&lt;30% or &gt;70%: Poor (minimal points)</li>
+                            </ul>
+                        </div>
+                        <div class="references">
+                            <p><strong>References:</strong></p>
+                            <ul>
+                                <li><a href="https://aasm.org/" target="_blank">American Academy of Sleep Medicine - Sleep Environment Guidelines</a></li>
+                                <li>Arens, E., & Zhang, H. (2006). The skin's role in human thermoregulation and comfort. Thermal and Moisture Transport in Fibrous Materials, 560-602.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sound Standards -->
+                <div class="standard-card">
+                    <h3>Sound Level (&lt;40dB)</h3>
+                    <div class="standard-details">
+                        <p><strong>Optimal Range:</strong> &lt;40dB (Quiet library level)</p>
+                        <p><strong>Impact:</strong> Noise disrupts sleep stages and prevents deep, restorative sleep.</p>
+                        <div class="scoring">
+                            <p><strong>Scoring:</strong></p>
+                            <ul>
+                                <li>&lt;40dB: Optimal (full points)</li>
+                                <li>40-55dB: Acceptable (reduced points)</li>
+                                <li>55-70dB: Disruptive (low points)</li>
+                                <li>&gt;70dB: Very disruptive (minimal points)</li>
+                            </ul>
+                        </div>
+                        <div class="references">
+                            <p><strong>References:</strong></p>
+                            <ul>
+                                <li><a href="https://www.who.int/news-room/fact-sheets/detail/noise" target="_blank">WHO Environmental Noise Guidelines for the European Region (2018)</a></li>
+                                <li>Basner, M., et al. (2014). Auditory and non-auditory effects of noise on health. The Lancet, 383(9925), 1325-1332.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Motion Standards -->
+                <div class="standard-card">
+                    <h3>Motion Detection (Minimal Movement)</h3>
+                    <div class="standard-details">
+                        <p><strong>Optimal:</strong> Fewer movements during sleep</p>
+                        <p><strong>Impact:</strong> Excessive movement indicates sleep fragmentation and reduced sleep quality.</p>
+                        <div class="scoring">
+                            <p><strong>Scoring:</strong></p>
+                            <ul>
+                                <li>0-5 movements: Optimal (full points)</li>
+                                <li>6-15 movements: Moderate (reduced points)</li>
+                                <li>16-30 movements: Restless (low points)</li>
+                                <li>&gt;30 movements: Very restless (minimal points)</li>
+                            </ul>
+                        </div>
+                        <div class="references">
+                            <p><strong>References:</strong></p>
+                            <ul>
+                                <li>Ancoli-Israel, S., et al. (2003). The role of actigraphy in the study of sleep and circadian rhythms. Sleep, 26(3), 342-392.</li>
+                                <li>Sadeh, A. (2011). The role and validity of actigraphy in sleep medicine: an update. Sleep Medicine Reviews, 15(4), 259-267.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Overall Classification -->
+                <div class="standard-card">
+                    <h3>Overall Sleep Quality Classification</h3>
+                    <div class="standard-details">
+                        <p><strong>Scoring System:</strong> Combined weighted score from all environmental factors (0-100)</p>
+                        <div class="scoring">
+                            <p><strong>Classification:</strong></p>
+                            <ul>
+                                <li><strong>Good Sleep:</strong> Score 70-100 (Optimal environmental conditions)</li>
+                                <li><strong>Poor Sleep:</strong> Score 0-69 (Suboptimal environmental conditions)</li>
+                            </ul>
+                        </div>
+                        <p class="note"><strong>Note:</strong> This system evaluates environmental factors only. Clinical sleep disorders require professional medical assessment.</p>
+                    </div>
+                </div>
+
+                <!-- FHIR API Documentation -->
+                <div class="standard-card">
+                    <h3>FHIR API - Healthcare Interoperability</h3>
+                    <div class="standard-details">
+                        <p><strong>About FHIR:</strong> Fast Healthcare Interoperability Resources (FHIR) is an international standard for electronic health information exchange.</p>
+                        <p>This system implements FHIR R4 Observation resources, enabling integration with hospital systems and electronic health records.</p>
+                        
+                        <div class="scoring">
+                            <p><strong>Available FHIR Endpoints:</strong></p>
+                            <ul>
+                                <li><strong>Get All Observations:</strong> 
+                                    <code>GET http://localhost:3000/api/fhir/Observation</code>
+                                </li>
+                                <li><strong>Filter by Device:</strong> 
+                                    <code>GET http://localhost:3000/api/fhir/Observation?patient=Device/pi-001</code>
+                                </li>
+                                <li><strong>Filter by Type (Temperature):</strong> 
+                                    <code>GET http://localhost:3000/api/fhir/Observation?code=CUSTOM-TEMP-001</code>
+                                </li>
+                                <li><strong>Limit Results:</strong> 
+                                    <code>GET http://localhost:3000/api/fhir/Observation?_count=10</code>
+                                </li>
+                                <li><strong>Get Single Observation:</strong> 
+                                    <code>GET http://localhost:3000/api/fhir/Observation/{id}</code>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="scoring">
+                            <p><strong>LOINC Codes Used:</strong></p>
+                            <ul>
+                                <li>CUSTOM-TEMP-001: Ambient Temperature</li>
+                                <li>CUSTOM-HUM-001: Relative Humidity</li>
+                                <li>CUSTOM-SOUND-001: Sound Level</li>
+                                <li>CUSTOM-MOTION-001: Motion Detection</li>
+                            </ul>
+                        </div>
+
+                        <div class="references">
+                            <p><strong>FHIR Resources:</strong></p>
+                            <ul>
+                                <li><a href="https://www.hl7.org/fhir/" target="_blank">FHIR R4 Specification</a></li>
+                                <li><a href="https://www.hl7.org/fhir/observation.html" target="_blank">FHIR Observation Resource</a></li>
+                                <li><a href="https://loinc.org/" target="_blank">LOINC - Logical Observation Identifiers Names and Codes</a></li>
+                            </ul>
+                        </div>
+
+                        <p class="note"><strong>Note:</strong> Custom LOINC codes are used for this educational project. Production systems should apply for official LOINC codes through the Regenstrief Institute.</p>
+                    </div>
+                </div>
+
+                <!-- Disclaimer -->
+                <div class="disclaimer">
+                    <p><strong>Disclaimer:</strong> This sleep monitoring system is designed for educational and research purposes. It assesses environmental factors that may affect sleep quality but does not diagnose medical conditions. For sleep disorders or health concerns, please consult a qualified healthcare professional.</p>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p><strong>Sleep Monitoring System</strong></p>
+        <p>Bachelor of Science in Health Informatics - 3rd Semester</p>
+        <p>Media Management & Innovation and Complexity Management</p>
+        <p>Deggendorf Institute of Technology</p>
+        <p>European Campus Rottal-Inn</p>
+        <p style="margin-top: 10px; font-size: 0.9rem;">Real-time environmental monitoring with FHIR-compliant healthcare interoperability</p>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="js/websocket.js"></script>
+    <script src="js/charts.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

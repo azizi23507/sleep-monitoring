@@ -1,0 +1,75 @@
+==================== TERMINAL 1 ====================
+
+export DATABASE_URL="postgres://postgres:password@localhost/sleep_monitor"
+RUST_LOG=info cargo run
+
+(LEAVE RUNNING)
+
+
+==================== TERMINAL 2 ====================
+
+cd ~/sleep-backend-updated
+//setup_test.sh: Checks PostgreSQL/Redis installed and running, creates database, applies schema
+./setup_test.sh
+//test_branch_2a.sh: Runs complete test suite - sends fake Pi data, checks database, tests all FHIR API endpoints, verifies everything works
+./test_branch_2a.sh
+
+//Counts total sensor readings in database
+sudo -u postgres psql -d sleep_monitor -c "SELECT COUNT(*) FROM sensor_readings;"
+
+//Counts total FHIR observations in database (should be 4x sensor readings)
+sudo -u postgres psql -d sleep_monitor -c "SELECT COUNT(*) FROM fhir_observations;"
+
+// Checks if backend is healthy and Redis/PostgreSQL are connected
+curl http://localhost:3000/health
+
+//Gets last 5 FHIR observations from API
+curl "http://localhost:3000/api/fhir/Observation?_count=5"
+
+Simulates Pi sending sensor data to backend (fake test data)
+curl -X POST http://localhost:3000/api/sensor-data -H "Content-Type: application/json" -d '{"temp":23.5,"hum":48.0,"motion":true,"sound_db":38.0,"deviceid":"pi-test","timestamp":"2024-12-28T23:50:00Z"}'
+
+Check Redis:
+
+redis-cli LRANGE sensor:latest 0 0
+
+Test ML Endpoints (Terminal 2)
+Keep backend running in Terminal 1, run these in Terminal 2:
+
+Test 1: Get All Sleep Records (should be empty)
+curl http://localhost:3000/api/sleep-records
+Expected:
+json{"total": 0, "records": []}
+(Empty because Python ML hasn't run yet)
+
+Test 2: Get Latest Sleep Quality (should fail - no data)
+curl http://localhost:3000/api/sleep-quality/latest
+Expected: Error message (no records exist)
+
+Test 3: Get Record by Date (should fail - no data)
+curl http://localhost:3000/api/sleep-records/2024-12-29
+Expected: Error message (no record for this date)
+
+Test 4: Manually Insert Test Data
+sudo -u postgres psql -d sleep_monitor -c "INSERT INTO sleep_records (id, device_id, sleep_date, analysis_start, analysis_end, quality_score, classification, avg_temperature, avg_humidity, avg_sound_level, motion_events_count) VALUES (uuid_generate_v4(), 'pi-001', '2024-12-28', '2024-12-28 22:00:00+00', '2024-12-29 06:00:00+00', 75, 'Good', 22.5, 45.0, 35.0, 5);"
+
+Test 5: Get All Records Again (should have 1)
+curl http://localhost:3000/api/sleep-records
+Expected: JSON with 1 record, score 75, classification "Good"
+
+Test 6: Get Latest Quality (should work now)
+curl http://localhost:3000/api/sleep-quality/latest
+Expected:
+json{"date": "2024-12-28", "score": 75, "classification": "Good"}
+
+
+Run the python server for the frontend:
+run the wsl in the frontend directory:
+cd ~/sleep-frontend
+python3 -m http.server 8000
+```
+Wait for: "Serving HTTP on 0.0.0.0 port 8000"
+
+**Browser:**
+```
+http://localhost:8000

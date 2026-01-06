@@ -1,0 +1,76 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\n        SELECT \n            id::text as \"id!\",\n            device_id as \"device_id!\",\n            sleep_date::text as \"sleep_date!\",\n            quality_score as \"quality_score!\",\n            classification as \"classification!\",\n            avg_temperature::double precision as \"avg_temperature?\",\n            avg_humidity::double precision as \"avg_humidity?\",\n            avg_sound_level::double precision as \"avg_sound_level?\",\n            motion_events_count as \"motion_events_count?\",\n            analyzed_at::text as \"analyzed_at?\"\n        FROM sleep_records\n        WHERE sleep_date::text = $1\n        LIMIT 1\n        ",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id!",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 1,
+        "name": "device_id!",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 2,
+        "name": "sleep_date!",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 3,
+        "name": "quality_score!",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 4,
+        "name": "classification!",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 5,
+        "name": "avg_temperature?",
+        "type_info": "Float8"
+      },
+      {
+        "ordinal": 6,
+        "name": "avg_humidity?",
+        "type_info": "Float8"
+      },
+      {
+        "ordinal": 7,
+        "name": "avg_sound_level?",
+        "type_info": "Float8"
+      },
+      {
+        "ordinal": 8,
+        "name": "motion_events_count?",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 9,
+        "name": "analyzed_at?",
+        "type_info": "Text"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Text"
+      ]
+    },
+    "nullable": [
+      null,
+      false,
+      null,
+      false,
+      false,
+      null,
+      null,
+      null,
+      true,
+      null
+    ]
+  },
+  "hash": "b42dd730c3f8d7983b3451344e6f3aee7680cb91443c5f8a663886b5e5b0536e"
+}
