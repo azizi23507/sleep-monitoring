@@ -63,6 +63,16 @@ header h1 {
     background-color: #ef4444;
 }
 
+.status-dot.connecting {
+    background-color: #f59e0b;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
 /* Navigation Tabs */
 .tabs {
     background: rgba(255, 255, 255, 0.9);
