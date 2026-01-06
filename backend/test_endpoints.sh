@@ -22,7 +22,10 @@ echo "2. Testing JWT Token Generation..."
 TOKEN_RESPONSE=$(curl -s -X POST $BASE_URL/api/token \
   -H "Content-Type: application/json" \
   -d '{"device_id": "test-device-001"}')
-TOKEN=$(echo $TOKEN_RESPONSE | grep -o '"token":"[^"]*' | cut -d'"' -f4)
+
+# Extract token - fix JSON parsing
+TOKEN=$(echo "$TOKEN_RESPONSE" | grep -oP '"token":"\K[^"]+' || echo "$TOKEN_RESPONSE" | sed -n 's/.*"token":"\([^"]*\)".*/\1/p')
+
 echo "✓ Token received: ${TOKEN:0:50}..."
 echo ""
 
