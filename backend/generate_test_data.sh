@@ -12,7 +12,7 @@ echo ""
 
 # Get JWT token
 echo "Getting authentication token..."
-TOKEN_RESPONSE=$(curl -s -X POST $BASE_URL/token \
+TOKEN_RESPONSE=$(curl -s -X POST $BASE_URL/auth/token \
   -H "Content-Type: application/json" \
   -d "{\"device_id\": \"$DEVICE_ID\"}")
 
