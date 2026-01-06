@@ -42,13 +42,13 @@ pub fn build_router(
     // Global application state shared across all routes
     let app_state = AppState { realtime, db_pool, broadcast_tx };
 
-    // Path to sleep-frontend (sibling folder of sleep-backend)
+    // Path to frontend (sibling folder of backend)
     // Assumes directory structure:
     // project/
-    //   ├── sleep-backend/
-    //   └── sleep-frontend/
+    //   ├── backend/
+    //   └── frontend/
     let frontend_root: PathBuf =
-        PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../sleep-frontend");
+        PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../frontend");
 
     // ONLY Pi sensor data endpoint requires authentication
     let protected_routes = Router::new()
@@ -92,6 +92,6 @@ pub fn build_router(
 async fn index() -> axum::response::Html<&'static str> {
     axum::response::Html(include_str!(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/../sleep-frontend/index.html"
+        "/../frontend/index.html"
     )))
 }
