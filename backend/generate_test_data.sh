@@ -46,11 +46,11 @@ while true; do
       -H "Content-Type: application/json" \
       -H "Authorization: Bearer $TOKEN" \
       -d "{
-        \"device_id\": \"$DEVICE_ID\",
-        \"temperature\": $TEMP,
-        \"humidity\": $HUMIDITY,
-        \"sound_level\": $SOUND,
-        \"motion_detected\": $([ $MOTION -eq 1 ] && echo "true" || echo "false"),
+        \"temp\": $TEMP,
+        \"hum\": $HUMIDITY,
+        \"motion\": $([ $MOTION -eq 1 ] && echo "true" || echo "false"),
+        \"sound_db\": $SOUND,
+        \"deviceid\": \"$DEVICE_ID\",
         \"timestamp\": \"$TIMESTAMP\"
       }")
     
