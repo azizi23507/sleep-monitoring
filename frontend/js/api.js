@@ -10,7 +10,8 @@
 
 class APIManager {
     constructor() {
-        this.baseURL = 'http://localhost:3000/api';
+        // Use config for environment-aware URL
+        this.baseURL = CONFIG.API_URL;
     }
 
     /**

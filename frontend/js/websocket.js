@@ -19,9 +19,9 @@ class WebSocketManager {
 
     /**
      * Connect to WebSocket server
-     * @param {string} url - WebSocket URL (default: ws://localhost:3000/ws)
+     * @param {string} url - WebSocket URL (uses CONFIG.WS_URL by default)
      */
-    connect(url = 'ws://localhost:3000/ws') {
+    connect(url = CONFIG.WS_URL) {
         try {
             this.ws = new WebSocket(url);
             

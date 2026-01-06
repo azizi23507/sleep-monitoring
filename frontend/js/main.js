@@ -71,10 +71,15 @@ function initializeTabs() {
  * Initialize WebSocket connection
  */
 function initializeWebSocket() {
+    const statusIndicator = document.getElementById('status-indicator');
+    const statusText = document.getElementById('status-text');
+    
+    // Show connecting state initially
+    statusIndicator.className = 'status-dot connecting';
+    statusText.textContent = 'Connecting...';
+    
     // Handle connection status updates
     wsManager.onStatus((connected) => {
-        const statusIndicator = document.getElementById('status-indicator');
-        const statusText = document.getElementById('status-text');
 
         if (connected) {
             statusIndicator.className = 'status-dot connected';
@@ -89,13 +94,17 @@ function initializeWebSocket() {
 
     // Handle incoming data
     wsManager.onData((data) => {
-        console.log('[App] Received data:', data.length, 'readings');
+        try {
+            console.log('[App] Received data:', data.length, 'readings');
 
-        // Update current values display
-        updateCurrentValues(data);
+            // Update current values display
+            updateCurrentValues(data);
 
-        // Update charts
-        chartManager.updateCharts(data);
+            // Update charts
+            chartManager.updateCharts(data);
+        } catch (error) {
+            console.error('[App] Error processing data:', error);
+        }
     });
 
     // Connect to backend
@@ -112,6 +121,12 @@ function updateCurrentValues(data) {
 
     // Get most recent reading (last item in array)
     const latest = data[data.length - 1];
+    
+    // Validate data structure
+    if (!latest || typeof latest.temp === 'undefined') {
+        console.warn('[App] Invalid data format received');
+        return;
+    }
 
     // Update temperature
     const tempElement = document.getElementById('current-temp');
