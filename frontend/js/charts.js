@@ -123,7 +123,7 @@ class ChartManager {
                     },
                     tooltip: {
                         enabled: true,
-                        mode: 'index',
+                        mode: 'nearest',
                         intersect: true,
                         callbacks: {
                             label: function(context) {
@@ -133,7 +133,7 @@ class ChartManager {
                     }
                 },
                 interaction: {
-                    mode: 'index',
+                    mode: 'nearest',
                     intersect: true
                 }
             }
