@@ -124,7 +124,7 @@ class ChartManager {
                     tooltip: {
                         enabled: true,
                         mode: 'nearest',
-                        intersect: true,
+                        intersect: false,
                         callbacks: {
                             label: function(context) {
                                 return context.dataset.label + ': ' + context.parsed.y;
@@ -134,7 +134,8 @@ class ChartManager {
                 },
                 interaction: {
                     mode: 'nearest',
-                    intersect: true
+                    axis: 'x',
+                    intersect: false
                 }
             }
         });
