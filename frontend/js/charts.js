@@ -123,8 +123,8 @@ class ChartManager {
                     },
                     tooltip: {
                         enabled: true,
-                        mode: 'nearest',
-                        intersect: false,
+                        mode: 'index',
+                        intersect: true,
                         callbacks: {
                             label: function(context) {
                                 return context.dataset.label + ': ' + context.parsed.y;
@@ -133,8 +133,8 @@ class ChartManager {
                     }
                 },
                 interaction: {
-                    mode: 'nearest',
-                    intersect: false
+                    mode: 'index',
+                    intersect: true
                 }
             }
         });
@@ -149,7 +149,13 @@ class ChartManager {
 
         // Process each reading
         data.forEach(reading => {
-            const timestamp = new Date(reading.timestamp).toLocaleTimeString();
+            // Format timestamp as 24-hour time (HH:MM:SS)
+            const timestamp = new Date(reading.timestamp).toLocaleTimeString('en-GB', { 
+                hour12: false,
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
             
             // Update temperature chart
             this.addDataPoint(this.charts.temperature, timestamp, reading.temp);
