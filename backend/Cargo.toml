@@ -26,7 +26,6 @@ tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
 
 # Error handling - better error types
 thiserror = "1.0"
-anyhow = "1.0"
 
 # Date/time handling - for timestamps
 chrono = { version = "0.4", features = ["serde"] }
