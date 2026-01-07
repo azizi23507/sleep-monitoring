@@ -15,7 +15,6 @@
 # Build artifacts
 backend/target/
 backend/Cargo.lock
-backend/.sqlx/
 
 # Environment files
 backend/.env

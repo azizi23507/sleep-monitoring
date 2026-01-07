@@ -42,13 +42,14 @@ pub fn build_router(
     // Global application state shared across all routes
     let app_state = AppState { realtime, db_pool, broadcast_tx };
 
-    // Path to frontend (sibling folder of backend)
-    // Assumes directory structure:
-    // project/
-    //   ├── backend/
-    //   └── frontend/
-    let frontend_root: PathBuf =
-        PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../frontend");
+    // Path to frontend
+    // In Docker: /app/frontend
+    // In development: ../frontend (relative to backend)
+    let frontend_root: PathBuf = if std::path::Path::new("/app/frontend").exists() {
+        PathBuf::from("/app/frontend")
+    } else {
+        PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../frontend")
+    };
 
     // ONLY Pi sensor data endpoint requires authentication
     let protected_routes = Router::new()
@@ -90,7 +91,12 @@ pub fn build_router(
 /// This function is called when the user visits the root URL (/)
 /// It returns the HTML content from the filesystem
 async fn index() -> axum::response::Html<String> {
+    // Try Docker path first, then development path
     let html = std::fs::read_to_string("/app/frontend/index.html")
+        .or_else(|_| {
+            let dev_path = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../frontend/index.html");
+            std::fs::read_to_string(dev_path)
+        })
         .unwrap_or_else(|_| "<h1>Frontend not found</h1>".to_string());
     axum::response::Html(html)
 }
