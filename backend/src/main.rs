@@ -68,10 +68,12 @@ async fn main() {
     };
 
     // Run migrations (create tables if they don't exist)
+    // Migration files are embedded at compile time from ./migrations
     tracing::info!("Running database migrations...");
     match sqlx::migrate!("./migrations").run(&db_pool).await {
         Ok(_) => tracing::info!("Database migrations complete"),
         Err(e) => {
+            tracing::error!("Migration failed: {}", e);
             tracing::warn!("Migration error (may be okay if tables exist): {}", e);
         }
     }
