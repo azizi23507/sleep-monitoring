@@ -49,28 +49,37 @@
 ### 2.2 Service Architecture
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│ Docker Compose │
-│ │
-│ ┌──────────────┐ ┌──────────────┐ ┌──────────────┐ │
-│ │ Backend │ │ PostgreSQL │ │ Redis │ │
-│ │ (Rust) │ │ Database │ │ Cache │ │
-│ │ Port: 3000 │ │ Port: 5432 │ │ Port: 6379 │ │
-│ │ │ │ │ │ │ │
-│ │ + Frontend │ │ 5 Tables │ │ Real-time │ │
-│ │ (Static) │ │ + UUID │ │ Buffer │ │
-│ └──────┬───────┘ └──────┬───────┘ └──────┬───────┘ │
-│ │ │ │ │
-│ └─────────────────┴──────────────────┘ │
-│ sleep-network │
-└─────────────────────────────────────────────────────────────┘
- │
- │ HTTP/WebSocket (Port 3000)
- │
- ┌─────▼─────┐
- │ Browser │
- │ Client │
- └───────────┘
+┌──────────────────────────────────────────────────────────────────┐
+│                        Docker Compose Environment                │
+│                                                                  │
+│  ┌────────────────┐      ┌─────────────┐      ┌─────────────┐  │
+│  │    Backend     │      │ PostgreSQL  │      │    Redis    │  │
+│  │   (Rust+Axum)  │      │  Database   │      │    Cache    │  │
+│  │                │      │             │      │             │  │
+│  │  Port: 3000    │◄────►│ Port: 5432  │      │ Port: 6379  │  │
+│  │                │      │             │      │             │  │
+│  │  + Frontend    │      │  4 Tables:  │◄────►│  Real-time  │  │
+│  │  (HTML/CSS/JS) │      │  - sensor_  │      │   Buffer    │  │
+│  │                │      │    readings │      │             │  │
+│  │  + WebSocket   │      │  - fhir_obs │      │ (No persist)│  │
+│  │  + REST API    │      │  - sleep_   │      │             │  │
+│  │  + FHIR API    │      │    records  │      │             │  │
+│  │                │      │  - ml_log   │      │             │  │
+│  └────────┬───────┘      └─────────────┘      └─────────────┘  │
+│           │                                                      │
+│           └──────────────────────────────────────────────────►  │
+│                     sleep-network (bridge)                       │
+└──────────────────────────────────────────────────────────────────┘
+            │
+            │ HTTP/WebSocket (Port 3000)
+            │
+    ┌───────▼────────┐
+    │  Browser Client │
+    │                │
+    │  - Dashboard   │
+    │  - Real-time   │
+    │  - Charts      │
+    └────────────────┘
 ```
 
 ---
@@ -328,7 +337,7 @@ CREATE TABLE ml_processing_log (
 
 ## 7. CODE QUALITY ASSESSMENT
 
-### 7.1 Backend Code Quality ⭐⭐⭐⭐⭐
+### 7.1 Backend Code Quality (5/5)
 
 **Strengths:**
 - **Type safety:** Rust's strong typing prevents many runtime errors
@@ -343,7 +352,7 @@ CREATE TABLE ml_processing_log (
 - **Modules:** 17 files, well-organized
 - **Test coverage:** No unit tests (manual testing only)
 
-### 7.2 Frontend Code Quality ⭐⭐⭐⭐
+### 7.2 Frontend Code Quality (4/5)
 
 **Strengths:**
 - **Modular design:** Separate files for concerns
@@ -356,7 +365,7 @@ CREATE TABLE ml_processing_log (
 - **Limited validation:** Client-side validation minimal
 - **No tests:** No automated frontend tests
 
-### 7.3 Database Schema Quality ⭐⭐⭐⭐⭐
+### 7.3 Database Schema Quality (5/5)
 
 **Strengths:**
 - **Normalized design:** No data duplication
@@ -573,7 +582,7 @@ CMD ["/app/sleep-backend"]
 
 ## 13. FINAL ASSESSMENT
 
-### 13.1 Overall Rating: ⭐⭐⭐⭐⭐ (5/5)
+### 13.1 Overall Rating: (5/5)
 
 **For an Academic/Research Project:**
 - **Functionality:** Fully implemented and working
@@ -583,7 +592,7 @@ CMD ["/app/sleep-backend"]
 - **FHIR:** Healthcare standards compliant
 - **Real-time:** WebSocket implementation working
 
-### 13.2 Production Readiness: ⭐⭐⭐ (3/5)
+### 13.2 Production Readiness: (3/5)
 
 **Needs before production:**
 - Security hardening (secrets, HTTPS, rate limiting)
@@ -596,14 +605,14 @@ CMD ["/app/sleep-backend"]
 
 | Aspect | Rating | Notes |
 |--------|--------|-------|
-| **Architecture** | ⭐⭐⭐⭐⭐ | Excellent separation, scalable |
-| **Backend Code** | ⭐⭐⭐⭐⭐ | Clean Rust, type-safe, well-structured |
-| **Frontend Code** | ⭐⭐⭐⭐ | Good, but needs TypeScript |
-| **Database Design** | ⭐⭐⭐⭐⭐ | Normalized, indexed, migrations |
-| **Security** | ⭐⭐⭐ | Good foundation, needs hardening |
-| **Testing** | ⭐⭐ | Manual only, needs automation |
-| **Documentation** | ⭐⭐⭐⭐ | Good inline, needs external docs |
-| **Performance** | ⭐⭐⭐⭐⭐ | Fast, efficient, scalable |
+| **Architecture** | 5/5 | Excellent separation, scalable |
+| **Backend Code** | 5/5 | Clean Rust, type-safe, well-structured |
+| **Frontend Code** | 4/5 | Good, but needs TypeScript |
+| **Database Design** | 5/5 | Normalized, indexed, migrations |
+| **Security** | 3/5 | Good foundation, needs hardening |
+| **Testing** | 2/5 | Manual only, needs automation |
+| **Documentation** | 4/5 | Good inline, needs external docs |
+| **Performance** | 5/5 | Fast, efficient, scalable |
 
 ---
 
