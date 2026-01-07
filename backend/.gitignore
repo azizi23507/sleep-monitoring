@@ -3,9 +3,6 @@
 **/*.rs.bk
 *.pdb
 
-# Cargo lock file (commit for binaries, ignore for libraries)
-Cargo.lock
-
 # Environment variables and secrets
 .env
 .env.local
