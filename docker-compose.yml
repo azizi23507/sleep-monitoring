@@ -19,12 +19,18 @@ services:
     networks:
       - sleep-network
 
-  # Redis Cache
+  # Redis Cache (No persistence - resets on restart)
   redis:
     image: redis:7-alpine
     container_name: sleep-monitor-redis
     ports:
       - "6379:6379"
+    # Note: No volume configured - cache resets on container restart
+    # This is intentional for real-time streaming cache
+    # To enable persistence, uncomment the volumes section below
+    # volumes:
+    #   - redis_data:/data
+    # command: redis-server --appendonly yes
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 10s
@@ -44,7 +50,9 @@ services:
     environment:
       DATABASE_URL: postgres://postgres:password@postgres:5432/sleep_monitor
       REDIS_URL: redis://redis:6379
-      JWT_SECRET: ${JWT_SECRET:-dev-secret-key-for-docker}
+      # SECURITY WARNING: Change JWT_SECRET in production!
+      # Generate secure key: openssl rand -base64 32
+      JWT_SECRET: ${JWT_SECRET:-dev-secret-key-for-docker-CHANGE-IN-PRODUCTION}
       RUST_LOG: info
       SERVER_HOST: 0.0.0.0
       SERVER_PORT: 3000
@@ -60,6 +68,9 @@ services:
 volumes:
   postgres_data:
     driver: local
+  # Uncomment to enable Redis persistence
+  # redis_data:
+  #   driver: local
 
 networks:
   sleep-network:

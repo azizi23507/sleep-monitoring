@@ -43,6 +43,8 @@ docker-compose down -v
 2. **Redis Cache** (port 6379)
    - Used for WebSocket real-time data
    - Used for caching last 100 sensor readings
+   - **Note:** Data resets on container restart (no persistence configured)
+   - To enable persistence, see "Redis Persistence" section below
 
 3. **Rust Backend + Frontend** (port 3000)
    - Rust API backend
@@ -91,7 +93,7 @@ docker-compose exec redis redis-cli
 ### Default Values (docker-compose.yml)
 - `DATABASE_URL`: postgres://postgres:password@postgres:5432/sleep_monitor
 - `REDIS_URL`: redis://redis:6379
-- `JWT_SECRET`: dev-secret-key-for-docker
+- `JWT_SECRET`: dev-secret-key-for-docker-CHANGE-IN-PRODUCTION ⚠️
 - `RUST_LOG`: info
 
 ### Custom Configuration
@@ -99,11 +101,19 @@ docker-compose exec redis redis-cli
 Create `.env` file in project root:
 
 ```bash
-JWT_SECRET=your-custom-secret-key
+JWT_SECRET=your-custom-secure-secret-key
 RUST_LOG=debug
 ```
 
 Docker Compose will automatically load it.
+
+### Security Warning ⚠️
+
+**Before deploying to production:**
+1. Change `JWT_SECRET` to a strong random value
+2. Generate with: `openssl rand -base64 32`
+3. Set in `.env` file or docker-compose.yml
+4. Never use the default development secret!
 
 ## Testing with Docker
 
@@ -241,9 +251,42 @@ docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
 
 ## Volumes
 
-- `postgres_data`: Persists database data
-- Data survives `docker-compose down`
-- Deleted with `docker-compose down -v`
+- `postgres_data`: Persists database data across container restarts
+  - Data survives `docker-compose down`
+  - Deleted with `docker-compose down -v`
+  
+- **Redis:** No volume configured (cache resets on restart)
+  - Intentional for real-time streaming cache
+  - To enable persistence, see "Redis Persistence" section below
+
+## Redis Persistence (Optional)
+
+By default, Redis cache resets when the container restarts. To enable persistence:
+
+1. **Edit docker-compose.yml:**
+```yaml
+redis:
+  volumes:
+    - redis_data:/data
+  command: redis-server --appendonly yes
+```
+
+2. **Add to volumes section:**
+```yaml
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+```
+
+3. **Restart services:**
+```bash
+docker-compose down
+docker-compose up -d
+```
+
+**Note:** For a real-time streaming cache, persistence may not be necessary as data is meant to be temporary.
 
 ## Networks
 

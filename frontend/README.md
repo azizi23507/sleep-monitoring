@@ -302,6 +302,12 @@ Requirements:
 **Solutions:**
 1. Verify backend API endpoints working: `curl http://localhost:3000/api/sleep-quality/latest`
 2. Ensure ML script has run and created data
+3. Note: Python ML service not yet delivered - infrastructure ready but no analysis results yet
+
+---
+
+**Last Updated:** January 7, 2026  
+**Version:** 1.0.0
 3. Check browser console for API errors
 4. Try manual refresh: `window.app.refreshAnalysis()` in console
 
