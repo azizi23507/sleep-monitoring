@@ -88,10 +88,9 @@ pub fn build_router(
 /// Serves the main index.html file
 /// 
 /// This function is called when the user visits the root URL (/)
-/// It returns the HTML content embedded at compile time
-async fn index() -> axum::response::Html<&'static str> {
-    axum::response::Html(include_str!(concat!(
-        env!("CARGO_MANIFEST_DIR"),
-        "/../frontend/index.html"
-    )))
+/// It returns the HTML content from the filesystem
+async fn index() -> axum::response::Html<String> {
+    let html = std::fs::read_to_string("/app/frontend/index.html")
+        .unwrap_or_else(|_| "<h1>Frontend not found</h1>".to_string());
+    axum::response::Html(html)
 }
