@@ -16,10 +16,10 @@ RUN mkdir src && \
 # Copy actual source code
 COPY backend/src ./src
 COPY backend/migrations ./migrations
-COPY backend/.sqlx ./.sqlx
 
-# Set DATABASE_URL for sqlx compile-time checks (dummy value)
+# Set DATABASE_URL for sqlx offline mode
 ENV DATABASE_URL=postgres://postgres:password@localhost/sleep_monitor
+ENV SQLX_OFFLINE=true
 
 # Build the real application
 RUN cargo build --release
