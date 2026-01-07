@@ -21,12 +21,12 @@ This document explains the FHIR R4 implementation for the Sleep Monitoring Syste
 
 ```
 Pi → Backend → PostgreSQL (sensor_readings)
-                      ↓
-              FHIR Converter
-                      ↓
-              PostgreSQL (fhir_observations)
-                      ↓
-              FHIR API → External Systems
+ ↓
+ FHIR Converter
+ ↓
+ PostgreSQL (fhir_observations)
+ ↓
+ FHIR API → External Systems
 ```
 
 ### Conversion Process
@@ -46,40 +46,40 @@ Pi → Backend → PostgreSQL (sensor_readings)
 
 ```json
 {
-  "resourceType": "Observation",
-  "id": "obs-abc123-temp",
-  "status": "final",
-  "category": [{
-    "coding": [{
-      "system": "http://terminology.hl7.org/CodeSystem/observation-category",
-      "code": "vital-signs",
-      "display": "Vital Signs"
-    }],
-    "text": "Vital Signs"
-  }],
-  "code": {
-    "coding": [{
-      "system": "http://loinc.org",
-      "code": "CUSTOM-TEMP-001",
-      "display": "Ambient Temperature"
-    }],
-    "text": "Temperature"
-  },
-  "subject": {
-    "reference": "Device/pi-001",
-    "display": "Sleep Monitor Device"
-  },
-  "effectiveDateTime": "2024-12-26T15:30:00Z",
-  "valueQuantity": {
-    "value": 22.5,
-    "unit": "°C",
-    "system": "http://unitsofmeasure.org",
-    "code": "Cel"
-  },
-  "device": {
-    "reference": "Device/pi-001",
-    "display": "Arduino/Raspberry Pi Sensor"
-  }
+ "resourceType": "Observation",
+ "id": "obs-abc123-temp",
+ "status": "final",
+ "category": [{
+ "coding": [{
+ "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+ "code": "vital-signs",
+ "display": "Vital Signs"
+ }],
+ "text": "Vital Signs"
+ }],
+ "code": {
+ "coding": [{
+ "system": "http://loinc.org",
+ "code": "CUSTOM-TEMP-001",
+ "display": "Ambient Temperature"
+ }],
+ "text": "Temperature"
+ },
+ "subject": {
+ "reference": "Device/pi-001",
+ "display": "Sleep Monitor Device"
+ },
+ "effectiveDateTime": "2024-12-26T15:30:00Z",
+ "valueQuantity": {
+ "value": 22.5,
+ "unit": "°C",
+ "system": "http://unitsofmeasure.org",
+ "code": "Cel"
+ },
+ "device": {
+ "reference": "Device/pi-001",
+ "display": "Arduino/Raspberry Pi Sensor"
+ }
 }
 ```
 
@@ -121,19 +121,19 @@ curl http://localhost:3000/api/fhir/Observation/obs-123e4567-temp
 **Response (200 OK):**
 ```json
 {
-  "resourceType": "Observation",
-  "id": "obs-123e4567-temp",
-  "status": "final",
-  "code": { ... },
-  "valueQuantity": { ... }
+ "resourceType": "Observation",
+ "id": "obs-123e4567-temp",
+ "status": "final",
+ "code": { ... },
+ "valueQuantity": { ... }
 }
 ```
 
 **Response (404 Not Found):**
 ```json
 {
-  "error": "Observation not found: obs-invalid-id",
-  "status": 404
+ "error": "Observation not found: obs-invalid-id",
+ "status": 404
 }
 ```
 
@@ -173,25 +173,25 @@ curl "http://localhost:3000/api/fhir/Observation?_count=20"
 **Response (200 OK):**
 ```json
 {
-  "resourceType": "Bundle",
-  "type": "searchset",
-  "total": 40,
-  "entry": [
-    {
-      "resource": {
-        "resourceType": "Observation",
-        "id": "obs-123-temp",
-        ...
-      }
-    },
-    {
-      "resource": {
-        "resourceType": "Observation",
-        "id": "obs-123-hum",
-        ...
-      }
-    }
-  ]
+ "resourceType": "Bundle",
+ "type": "searchset",
+ "total": 40,
+ "entry": [
+ {
+ "resource": {
+ "resourceType": "Observation",
+ "id": "obs-123-temp",
+ ...
+ }
+ },
+ {
+ "resource": {
+ "resourceType": "Observation",
+ "id": "obs-123-hum",
+ ...
+ }
+ }
+ ]
 }
 ```
 
@@ -203,16 +203,16 @@ curl "http://localhost:3000/api/fhir/Observation?_count=20"
 
 ```sql
 CREATE TABLE fhir_observations (
-    id UUID PRIMARY KEY,
-    sensor_reading_id UUID REFERENCES sensor_readings(id),
-    resource_type VARCHAR(50) DEFAULT 'Observation',
-    resource_data JSONB NOT NULL,           -- Full FHIR resource
-    fhir_id VARCHAR(100) UNIQUE NOT NULL,   -- Searchable ID
-    patient_id VARCHAR(100),                -- Device reference
-    loinc_code VARCHAR(20),                 -- For filtering
-    observation_category VARCHAR(50),       -- vital-signs, environment, etc.
-    created_at TIMESTAMPTZ DEFAULT NOW(),
-    updated_at TIMESTAMPTZ DEFAULT NOW()
+ id UUID PRIMARY KEY,
+ sensor_reading_id UUID REFERENCES sensor_readings(id),
+ resource_type VARCHAR(50) DEFAULT 'Observation',
+ resource_data JSONB NOT NULL, -- Full FHIR resource
+ fhir_id VARCHAR(100) UNIQUE NOT NULL, -- Searchable ID
+ patient_id VARCHAR(100), -- Device reference
+ loinc_code VARCHAR(20), -- For filtering
+ observation_category VARCHAR(50), -- vital-signs, environment, etc.
+ created_at TIMESTAMPTZ DEFAULT NOW(),
+ updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 ```
 
@@ -231,15 +231,15 @@ CREATE TABLE fhir_observations (
 
 ```bash
 curl -X POST http://localhost:3000/api/sensor-data \
-  -H "Content-Type: application/json" \
-  -d '{
-    "temp": 22.5,
-    "hum": 45.0,
-    "motion": false,
-    "sound_db": 35.2,
-    "deviceid": "pi-001",
-    "timestamp": "2024-12-26T15:30:00Z"
-  }'
+ -H "Content-Type: application/json" \
+ -d '{
+ "temp": 22.5,
+ "hum": 45.0,
+ "motion": false,
+ "sound_db": 35.2,
+ "deviceid": "pi-001",
+ "timestamp": "2024-12-26T15:30:00Z"
+ }'
 ```
 
 This automatically:
@@ -256,10 +256,10 @@ SELECT * FROM sensor_readings ORDER BY created_at DESC LIMIT 1;
 
 -- Check FHIR observations (should be 4 for each sensor reading)
 SELECT 
-    fhir_id,
-    loinc_code,
-    observation_category,
-    resource_data->'valueQuantity'->>'value' as value
+ fhir_id,
+ loinc_code,
+ observation_category,
+ resource_data->'valueQuantity'->>'value' as value
 FROM fhir_observations
 ORDER BY created_at DESC
 LIMIT 4;
@@ -287,19 +287,19 @@ curl "http://localhost:3000/api/fhir/Observation?patient=Device/pi-001" | jq '.t
 External hospital systems can:
 
 1. **Query by Patient/Device**
-   ```
-   GET /api/fhir/Observation?patient=Device/pi-001
-   ```
+ ```
+ GET /api/fhir/Observation?patient=Device/pi-001
+ ```
 
 2. **Query by Type**
-   ```
-   GET /api/fhir/Observation?code=CUSTOM-TEMP-001
-   ```
+ ```
+ GET /api/fhir/Observation?code=CUSTOM-TEMP-001
+ ```
 
 3. **Get Specific Observation**
-   ```
-   GET /api/fhir/Observation/obs-123-temp
-   ```
+ ```
+ GET /api/fhir/Observation/obs-123-temp
+ ```
 
 ### Authentication (TODO - Production)
 
@@ -315,20 +315,20 @@ For production deployment, add:
 
 ### What We Implement
 
-✅ **Resource Structure:** FHIR R4 Observation  
-✅ **Data Types:** Quantity, Boolean, CodeableConcept  
-✅ **Categories:** vital-signs, environment, activity  
-✅ **References:** Device references  
-✅ **Timestamps:** ISO 8601 effectiveDateTime  
-✅ **Bundle:** Searchset bundles for queries  
+**Resource Structure:** FHIR R4 Observation 
+**Data Types:** Quantity, Boolean, CodeableConcept 
+**Categories:** vital-signs, environment, activity 
+**References:** Device references 
+**Timestamps:** ISO 8601 effectiveDateTime 
+**Bundle:** Searchset bundles for queries 
 
 ### What's Simplified
 
-⚠️ **LOINC Codes:** Using custom codes (production should apply for official)  
-⚠️ **Patient References:** Using Device instead of Patient  
-⚠️ **Authentication:** Not implemented (required for production)  
-⚠️ **CapabilityStatement:** Not provided (describes server capabilities)  
-⚠️ **Validation:** Basic validation (production should use FHIR validators)
+**LOINC Codes:** Using custom codes (production should apply for official) 
+**Patient References:** Using Device instead of Patient 
+**Authentication:** Not implemented (required for production) 
+**CapabilityStatement:** Not provided (describes server capabilities) 
+**Validation:** Basic validation (production should use FHIR validators)
 
 ---
 
@@ -338,9 +338,9 @@ For production deployment, add:
 
 ```sql
 -- Indexes speed up common queries
-CREATE INDEX idx_fhir_obs_fhir_id ON fhir_observations(fhir_id);          -- Single observation lookup
-CREATE INDEX idx_fhir_obs_patient ON fhir_observations(patient_id);       -- Filter by device
-CREATE INDEX idx_fhir_obs_loinc ON fhir_observations(loinc_code);         -- Filter by type
+CREATE INDEX idx_fhir_obs_fhir_id ON fhir_observations(fhir_id); -- Single observation lookup
+CREATE INDEX idx_fhir_obs_patient ON fhir_observations(patient_id); -- Filter by device
+CREATE INDEX idx_fhir_obs_loinc ON fhir_observations(loinc_code); -- Filter by type
 ```
 
 ### Storage Impact
@@ -375,8 +375,8 @@ RUST_LOG=debug cargo run
 ```sql
 -- Count observations per sensor reading
 SELECT 
-    sensor_reading_id,
-    COUNT(*) as obs_count
+ sensor_reading_id,
+ COUNT(*) as obs_count
 FROM fhir_observations
 GROUP BY sensor_reading_id
 ORDER BY sensor_reading_id DESC
@@ -403,27 +403,27 @@ SELECT COUNT(*) FROM fhir_observations;
 ## Next Steps (Production)
 
 1. **Apply for Official LOINC Codes**
-   - https://loinc.org
-   - Submit custom observations
+ - https://loinc.org
+ - Submit custom observations
 
 2. **Add Patient Resources**
-   - Create Patient resources (not just Device)
-   - Link observations to actual patients
+ - Create Patient resources (not just Device)
+ - Link observations to actual patients
 
 3. **Implement Authentication**
-   - OAuth 2.0 / JWT
-   - API keys for systems
-   - Rate limiting
+ - OAuth 2.0 / JWT
+ - API keys for systems
+ - Rate limiting
 
 4. **Add CapabilityStatement**
-   - Describe server capabilities
-   - Document supported resources
-   - FHIR conformance
+ - Describe server capabilities
+ - Document supported resources
+ - FHIR conformance
 
 5. **Validation**
-   - Use FHIR validator
-   - Ensure compliance
-   - Test with FHIR servers
+ - Use FHIR validator
+ - Ensure compliance
+ - Test with FHIR servers
 
 ---
 
@@ -437,4 +437,5 @@ SELECT COUNT(*) FROM fhir_observations;
 
 ---
 
-**Branch 2A Status:** ✅ COMPLETE - FHIR conversion and API implemented!
+**Branch 2A Status:** COMPLETE - FHIR conversion and API implemented!
+

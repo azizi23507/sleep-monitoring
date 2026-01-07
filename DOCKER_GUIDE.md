@@ -35,21 +35,21 @@ docker-compose down -v
 ## What Gets Started
 
 1. **PostgreSQL Database** (port 5432)
-   - Database: `sleep_monitor`
-   - User: `postgres`
-   - Password: `password`
-   - Data persisted in Docker volume
+ - Database: `sleep_monitor`
+ - User: `postgres`
+ - Password: `password`
+ - Data persisted in Docker volume
 
 2. **Redis Cache** (port 6379)
-   - Used for WebSocket real-time data
-   - Used for caching last 100 sensor readings
-   - **Note:** Data resets on container restart (no persistence configured)
-   - To enable persistence, see "Redis Persistence" section below
+ - Used for WebSocket real-time data
+ - Used for caching last 100 sensor readings
+ - **Note:** Data resets on container restart (no persistence configured)
+ - To enable persistence, see "Redis Persistence" section below
 
 3. **Rust Backend + Frontend** (port 3000)
-   - Rust API backend
-   - Serves frontend HTML/CSS/JS
-   - Auto-runs database migrations on startup
+ - Rust API backend
+ - Serves frontend HTML/CSS/JS
+ - Auto-runs database migrations on startup
 
 ## Development Workflow
 
@@ -93,7 +93,7 @@ docker-compose exec redis redis-cli
 ### Default Values (docker-compose.yml)
 - `DATABASE_URL`: postgres://postgres:password@postgres:5432/sleep_monitor
 - `REDIS_URL`: redis://redis:6379
-- `JWT_SECRET`: dev-secret-key-for-docker-CHANGE-IN-PRODUCTION ⚠️
+- `JWT_SECRET`: dev-secret-key-for-docker-CHANGE-IN-PRODUCTION (Warning: Change in production)
 - `RUST_LOG`: info
 
 ### Custom Configuration
@@ -107,7 +107,7 @@ RUST_LOG=debug
 
 Docker Compose will automatically load it.
 
-### Security Warning ⚠️
+### Security Warning
 
 **Before deploying to production:**
 1. Change `JWT_SECRET` to a strong random value
@@ -122,21 +122,21 @@ Docker Compose will automatically load it.
 ```bash
 # Get authentication token
 TOKEN=$(curl -s -X POST http://localhost:3000/api/auth/token \
-  -H "Content-Type: application/json" \
-  -d '{"device_id": "test-device"}' | grep -oP '"token":"\K[^"]+')
+ -H "Content-Type: application/json" \
+ -d '{"device_id": "test-device"}' | grep -oP '"token":"\K[^"]+')
 
 # Send sensor data
 curl -X POST http://localhost:3000/api/sensor-data \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer $TOKEN" \
-  -d '{
-    "temp": 22.5,
-    "hum": 45.0,
-    "motion": false,
-    "sound_db": 35.2,
-    "deviceid": "test-device",
-    "timestamp": "'$(date -u +%Y-%m-%dT%H:%M:%SZ)'"
-  }'
+ -H "Content-Type: application/json" \
+ -H "Authorization: Bearer $TOKEN" \
+ -d '{
+ "temp": 22.5,
+ "hum": 45.0,
+ "motion": false,
+ "sound_db": 35.2,
+ "deviceid": "test-device",
+ "timestamp": "'$(date -u +%Y-%m-%dT%H:%M:%SZ)'"
+ }'
 ```
 
 ### 2. Check Database
@@ -157,12 +157,12 @@ docker-compose exec redis redis-cli LLEN sensor:latest
 
 ```bash
 # Check what's using port 3000
-lsof -i :3000  # macOS/Linux
-netstat -ano | findstr :3000  # Windows
+lsof -i :3000 # macOS/Linux
+netstat -ano | findstr :3000 # Windows
 
 # Change port in docker-compose.yml
 ports:
-  - "8080:3000"  # Use 8080 instead
+ - "8080:3000" # Use 8080 instead
 ```
 
 ### Database Connection Failed
@@ -224,16 +224,16 @@ Create `docker-compose.prod.yml`:
 version: '3.8'
 
 services:
-  postgres:
-    environment:
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
-    restart: always
+ postgres:
+ environment:
+ POSTGRES_PASSWORD: ${DB_PASSWORD}
+ restart: always
 
-  backend:
-    environment:
-      JWT_SECRET: ${JWT_SECRET}
-      RUST_LOG: warn
-    restart: always
+ backend:
+ environment:
+ JWT_SECRET: ${JWT_SECRET}
+ RUST_LOG: warn
+ restart: always
 ```
 
 Run with:
@@ -252,12 +252,12 @@ docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
 ## Volumes
 
 - `postgres_data`: Persists database data across container restarts
-  - Data survives `docker-compose down`
-  - Deleted with `docker-compose down -v`
-  
+ - Data survives `docker-compose down`
+ - Deleted with `docker-compose down -v`
+ 
 - **Redis:** No volume configured (cache resets on restart)
-  - Intentional for real-time streaming cache
-  - To enable persistence, see "Redis Persistence" section below
+ - Intentional for real-time streaming cache
+ - To enable persistence, see "Redis Persistence" section below
 
 ## Redis Persistence (Optional)
 
@@ -266,18 +266,18 @@ By default, Redis cache resets when the container restarts. To enable persistenc
 1. **Edit docker-compose.yml:**
 ```yaml
 redis:
-  volumes:
-    - redis_data:/data
-  command: redis-server --appendonly yes
+ volumes:
+ - redis_data:/data
+ command: redis-server --appendonly yes
 ```
 
 2. **Add to volumes section:**
 ```yaml
 volumes:
-  postgres_data:
-    driver: local
-  redis_data:
-    driver: local
+ postgres_data:
+ driver: local
+ redis_data:
+ driver: local
 ```
 
 3. **Restart services:**
@@ -296,3 +296,4 @@ docker-compose up -d
 
 ## Last Updated
 January 6, 2026
+

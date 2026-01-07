@@ -193,8 +193,8 @@ Navigate to: `http://localhost:8000`
 3. Send test data via curl:
 
 curl -X POST http://localhost:3000/api/sensor-data \
-  -H "Content-Type: application/json" \
-  -d '{"temp":21.5,"hum":50.0,"motion":false,"sound_db":35.0,"deviceid":"test","timestamp":"2024-12-29T18:00:00Z"}'
+ -H "Content-Type: application/json" \
+ -d '{"temp":21.5,"hum":50.0,"motion":false,"sound_db":35.0,"deviceid":"test","timestamp":"2024-12-29T18:00:00Z"}'
 
 4. Frontend should update with these exact values
 ```
@@ -280,7 +280,7 @@ sudo -u postgres psql -d sleep_monitor -c "INSERT INTO sleep_records (id, device
 **Scenario B: No ML data**
 ```
 1. Clear sleep_records table:
-   sudo -u postgres psql -d sleep_monitor -c "DELETE FROM sleep_records;"
+ sudo -u postgres psql -d sleep_monitor -c "DELETE FROM sleep_records;"
 2. Click "Sleep Analysis" tab
 3. Should show "No data available" message
 4. Should NOT show error messages to user
@@ -301,12 +301,12 @@ sudo -u postgres psql -d sleep_monitor -c "INSERT INTO sleep_records (id, device
 2. Go to Performance tab
 3. Record for 30 seconds
 4. Check:
-   - Frame rate should be 60 FPS
-   - Memory should be stable
-   - No memory leaks
+ - Frame rate should be 60 FPS
+ - Memory should be stable
+ - No memory leaks
 5. Check Network tab:
-   - WebSocket connection active
-   - Data packets arriving regularly
+ - WebSocket connection active
+ - Data packets arriving regularly
 ```
 
 ---
@@ -323,14 +323,14 @@ sudo -u postgres psql -d sleep_monitor -c "INSERT INTO sleep_records (id, device
 1. Open DevTools (F12)
 2. Click device toolbar (phone icon)
 3. Test different devices:
-   - iPhone 12 (390x844)
-   - iPad (768x1024)
-   - Desktop (1920x1080)
+ - iPhone 12 (390x844)
+ - iPad (768x1024)
+ - Desktop (1920x1080)
 4. Check:
-   - Tabs work on mobile
-   - Charts visible on all sizes
-   - Text readable
-   - No content overflow
+ - Tabs work on mobile
+ - Charts visible on all sizes
+ - Text readable
+ - No content overflow
 ```
 
 ---
@@ -351,10 +351,10 @@ sudo -u postgres psql -d sleep_monitor -c "INSERT INTO sleep_records (id, device
 ```
 1. Open in each browser
 2. Run basic tests:
-   - Page loads
-   - WebSocket connects
-   - Charts display
-   - Tabs work
+ - Page loads
+ - WebSocket connects
+ - Charts display
+ - Tabs work
 3. Check console for errors
 ```
 
@@ -380,7 +380,7 @@ Chart.version
 
 // Send test data manually (for testing)
 window.app.wsManager.callbacks[0]([
-  {temp: 22.5, hum: 45, motion: false, sound_db: 35, deviceid: 'test', timestamp: new Date().toISOString()}
+ {temp: 22.5, hum: 45, motion: false, sound_db: 35, deviceid: 'test', timestamp: new Date().toISOString()}
 ])
 ```
 
@@ -429,17 +429,17 @@ Should be: http://localhost:3000/api
 ### Insert Test Sleep Record
 ```sql
 INSERT INTO sleep_records (
-    id, device_id, sleep_date, 
-    analysis_start, analysis_end,
-    quality_score, classification,
-    avg_temperature, avg_humidity, 
-    avg_sound_level, motion_events_count
+ id, device_id, sleep_date, 
+ analysis_start, analysis_end,
+ quality_score, classification,
+ avg_temperature, avg_humidity, 
+ avg_sound_level, motion_events_count
 ) VALUES (
-    uuid_generate_v4(), 'pi-001', CURRENT_DATE - 1,
-    (CURRENT_DATE - 1) || ' 22:00:00+00',
-    CURRENT_DATE || ' 06:00:00+00',
-    75, 'Good',
-    21.0, 48.0, 35.0, 5
+ uuid_generate_v4(), 'pi-001', CURRENT_DATE - 1,
+ (CURRENT_DATE - 1) || ' 22:00:00+00',
+ CURRENT_DATE || ' 06:00:00+00',
+ 75, 'Good',
+ 21.0, 48.0, 35.0, 5
 );
 ```
 
@@ -447,17 +447,17 @@ INSERT INTO sleep_records (
 ```sql
 INSERT INTO sleep_records 
 SELECT 
-    uuid_generate_v4(),
-    'pi-001',
-    CURRENT_DATE - i,
-    (CURRENT_DATE - i) || ' 22:00:00+00',
-    (CURRENT_DATE - i + 1) || ' 06:00:00+00',
-    60 + (RANDOM() * 30)::int,
-    CASE WHEN RANDOM() > 0.5 THEN 'Good' ELSE 'Poor' END,
-    18 + (RANDOM() * 6),
-    35 + (RANDOM() * 30),
-    25 + (RANDOM() * 30),
-    (RANDOM() * 20)::int
+ uuid_generate_v4(),
+ 'pi-001',
+ CURRENT_DATE - i,
+ (CURRENT_DATE - i) || ' 22:00:00+00',
+ (CURRENT_DATE - i + 1) || ' 06:00:00+00',
+ 60 + (RANDOM() * 30)::int,
+ CASE WHEN RANDOM() > 0.5 THEN 'Good' ELSE 'Poor' END,
+ 18 + (RANDOM() * 6),
+ 35 + (RANDOM() * 30),
+ 25 + (RANDOM() * 30),
+ (RANDOM() * 20)::int
 FROM generate_series(0, 6) i;
 ```
 
@@ -508,3 +508,5 @@ If all tests pass:
 ---
 
 **Testing complete! Frontend ready for production use.**
+
+

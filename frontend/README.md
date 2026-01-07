@@ -40,20 +40,20 @@ Clean, professional web interface for real-time sleep environment monitoring and
 
 ```
 Frontend (Browser)
-    |
-    +-- WebSocket Connection (ws://localhost:3000/ws)
-    |   |
-    |   +-- Receives: Live sensor data (every second)
-    |   +-- Updates: Charts + Current values
-    |   +-- No authentication required
-    |
-    +-- REST API Calls (http://localhost:3000/api/)
-        |
-        +-- GET /api/sleep-records (public)
-        +-- GET /api/sleep-quality/latest (public)
-        +-- No authentication required
-        +-- GET /sleep-quality/latest (Latest ML score)
-        +-- GET /sleep-records?limit=7 (Recent nights)
+ |
+ +-- WebSocket Connection (ws://localhost:3000/ws)
+ | |
+ | +-- Receives: Live sensor data (every second)
+ | +-- Updates: Charts + Current values
+ | +-- No authentication required
+ |
+ +-- REST API Calls (http://localhost:3000/api/)
+ |
+ +-- GET /api/sleep-records (public)
+ +-- GET /api/sleep-quality/latest (public)
+ +-- No authentication required
+ +-- GET /sleep-quality/latest (Latest ML score)
+ +-- GET /sleep-records?limit=7 (Recent nights)
 ```
 
 ---
@@ -62,17 +62,17 @@ Frontend (Browser)
 
 ```
 sleep-frontend/
-├── index.html              Main HTML page
+├── index.html Main HTML page
 ├── css/
-│   └── styles.css          All styles (responsive, clean design)
+│ └── styles.css All styles (responsive, clean design)
 ├── js/
-│   ├── websocket.js        WebSocket connection manager
-│   ├── charts.js           Chart.js chart management
-│   ├── api.js              REST API handler for ML results
-│   └── main.js             Main application controller
-├── README.md               This file
-├── STANDARDS.md            Sleep quality standards documentation
-└── TESTING.md              Testing guide
+│ ├── websocket.js WebSocket connection manager
+│ ├── charts.js Chart.js chart management
+│ ├── api.js REST API handler for ML results
+│ └── main.js Main application controller
+├── README.md This file
+├── STANDARDS.md Sleep quality standards documentation
+└── TESTING.md Testing guide
 ```
 
 ---
@@ -306,7 +306,7 @@ Requirements:
 
 ---
 
-**Last Updated:** January 7, 2026  
+**Last Updated:** January 7, 2026 
 **Version:** 1.0.0
 3. Check browser console for API errors
 4. Try manual refresh: `window.app.refreshAnalysis()` in console
@@ -328,15 +328,15 @@ Open browser console and use:
 
 ```javascript
 // Access managers
-window.app.wsManager     // WebSocket manager
-window.app.chartManager  // Chart manager
-window.app.apiManager    // API manager
+window.app.wsManager // WebSocket manager
+window.app.chartManager // Chart manager
+window.app.apiManager // API manager
 
 // Refresh analysis manually
 window.app.refreshAnalysis()
 
 // Check WebSocket status
-window.app.wsManager.ws.readyState  // 1 = connected
+window.app.wsManager.ws.readyState // 1 = connected
 
 // Clear all charts
 window.app.chartManager.clearCharts()
@@ -345,10 +345,10 @@ window.app.chartManager.clearCharts()
 ### Testing Data Flow
 1. Open browser console
 2. Watch for log messages:
-   - `[WebSocket] Connected`
-   - `[App] Received data: X readings`
-   - `[Charts] Updated`
-   - `[API] Data fetched`
+ - `[WebSocket] Connected`
+ - `[App] Received data: X readings`
+ - `[Charts] Updated`
+ - `[API] Data fetched`
 
 ---
 
@@ -410,3 +410,5 @@ For issues or questions:
 2. Check STANDARDS.md for standards information
 3. Check browser console for errors
 4. Verify backend is running and accessible
+
+

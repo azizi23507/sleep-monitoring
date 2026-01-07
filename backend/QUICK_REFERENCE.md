@@ -1,6 +1,6 @@
 # Backend Testing - Quick Reference Card
 
-## 🚀 Quick Start (3 Commands)
+## Quick Start (3 Commands)
 
 ```bash
 # 1. Setup environment variables
@@ -16,13 +16,13 @@ RUST_LOG=info cargo run
 
 ---
 
-## 🔐 Authentication (Pi Only)
+## Authentication (Pi Only)
 
 ### Get Token (for Pi devices only)
 ```bash
 curl -X POST http://localhost:3000/api/auth/token \
-  -H "Content-Type: application/json" \
-  -d '{"device_id":"pi-001"}'
+ -H "Content-Type: application/json" \
+ -d '{"device_id":"pi-001"}'
 
 # Save token for Pi
 TOKEN="eyJhbGci..."
@@ -32,7 +32,7 @@ TOKEN="eyJhbGci..."
 
 ---
 
-## 📋 Manual Test Commands
+## Manual Test Commands
 
 ### Health Check (No Auth)
 ```bash
@@ -42,9 +42,9 @@ curl http://localhost:3000/health
 ### Send Test Data (Auth Required - Pi Only)
 ```bash
 curl -X POST http://localhost:3000/api/sensor-data \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer $TOKEN" \
-  -d '{"temp":22.5,"hum":45.0,"motion":false,"sound_db":35.2,"deviceid":"pi-001","timestamp":"2024-12-30T10:00:00Z"}'
+ -H "Content-Type: application/json" \
+ -H "Authorization: Bearer $TOKEN" \
+ -d '{"temp":22.5,"hum":45.0,"motion":false,"sound_db":35.2,"deviceid":"pi-001","timestamp":"2024-12-30T10:00:00Z"}'
 ```
 
 ### Check Database (No Auth)
@@ -86,7 +86,7 @@ ws.onmessage = (e) => console.log(JSON.parse(e.data));
 
 ---
 
-## ✅ Expected Results
+## Expected Results
 
 | Action | Expected Result |
 |--------|----------------|
@@ -100,7 +100,7 @@ ws.onmessage = (e) => console.log(JSON.parse(e.data));
 
 ---
 
-## 🔧 Security Model
+## Security Model
 
 **Protected (Auth Required):**
 - POST /api/sensor-data (Pi sending data)
@@ -116,14 +116,15 @@ ws.onmessage = (e) => console.log(JSON.parse(e.data));
 
 ---
 
-## 📊 Success Criteria
+## Success Criteria
 
-- ✅ Pi can get token and send data
-- ✅ Frontend works without authentication
-- ✅ WebSocket connects without token
-- ✅ All read APIs work without auth
-- ✅ Only sensor data ingestion requires auth
+- Pi can get token and send data
+- Frontend works without authentication
+- WebSocket connects without token
+- All read APIs work without auth
+- Only sensor data ingestion requires auth
 
 ---
 
-**Run automated tests:** `./test_branch_2a.sh` 🧪
+**Run automated tests:** `./test_branch_2a.sh`
+

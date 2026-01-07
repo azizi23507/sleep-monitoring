@@ -98,10 +98,10 @@ Sleep Monitoring API Endpoint Tests
 
 9. Verifying Database Schema...
 ✓ Checking PostgreSQL tables...
-  fhir_observations
-  ml_processing_log
-  sensor_readings
-  sleep_records
+ fhir_observations
+ ml_processing_log
+ sensor_readings
+ sleep_records
 
 =========================================
 All Tests Complete!
@@ -110,33 +110,33 @@ All Tests Complete!
 
 ## What Success Looks Like
 
-- ✅ All 9 tests pass
-- ✅ Health endpoint returns "healthy"
-- ✅ JWT token generated successfully
-- ✅ Valid data accepted
-- ✅ Invalid data rejected with proper error
-- ✅ Authentication enforced on protected endpoints
-- ✅ Database tables exist and are accessible
+- All 9 tests pass
+- Health endpoint returns "healthy"
+- JWT token generated successfully
+- Valid data accepted
+- Invalid data rejected with proper error
+- Authentication enforced on protected endpoints
+- Database tables exist and are accessible
 
 ## Troubleshooting
 
 ### Token Extraction Fails
-**Issue:** Token not parsed from JSON response  
+**Issue:** Token not parsed from JSON response 
 **Fix:** Ensure `grep -oP` or `sed` is available in your shell
 
 ### Authentication Errors
-**Issue:** "Unauthorized: Invalid Authorization header format"  
-**Cause:** Token variable empty  
+**Issue:** "Unauthorized: Invalid Authorization header format" 
+**Cause:** Token variable empty 
 **Fix:** Check token extraction logic
 
 ### Database Errors
-**Issue:** "Database error" or "Connection refused"  
-**Cause:** PostgreSQL not running or wrong credentials  
+**Issue:** "Database error" or "Connection refused" 
+**Cause:** PostgreSQL not running or wrong credentials 
 **Fix:** Start PostgreSQL and verify DATABASE_URL
 
 ### Redis Errors
-**Issue:** "Redis connection failed"  
-**Cause:** Redis not running  
+**Issue:** "Redis connection failed" 
+**Cause:** Redis not running 
 **Fix:** Start Redis: `redis-server`
 
 ## Related Scripts
@@ -154,3 +154,5 @@ All Tests Complete!
 
 ## Last Updated
 January 6, 2026
+
+

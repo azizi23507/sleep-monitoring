@@ -2,7 +2,7 @@
 
 A non-invasive sleep quality monitoring system using Raspberry Pi sensors, Rust backend, and real-time web dashboard.
 
-## 🎯 Overview
+## Overview
 
 This system monitors sleep quality through environmental sensors (temperature, humidity, sound, motion) and provides:
 - **Real-time monitoring** via WebSocket streaming
@@ -10,11 +10,11 @@ This system monitors sleep quality through environmental sensors (temperature, h
 - **ML-ready infrastructure** for sleep quality analysis
 - **RESTful API** for data access and integration
 
-## 🏗️ Architecture
+## Architecture
 
 ### Three-Branch Data Flow
 
-**Branch 1: Real-time Streaming** ⚡
+**Branch 1: Real-time Streaming**
 ```
 Raspberry Pi → Backend → Redis Cache → WebSocket → Frontend Dashboard
 ```
@@ -22,7 +22,7 @@ Raspberry Pi → Backend → Redis Cache → WebSocket → Frontend Dashboard
 - Last 100 readings cached
 - 1-second update interval
 
-**Branch 2A: FHIR Compliance** 🏥
+**Branch 2A: FHIR Compliance**
 ```
 Raspberry Pi → Backend → PostgreSQL → FHIR API
 ```
@@ -30,14 +30,14 @@ Raspberry Pi → Backend → PostgreSQL → FHIR API
 - LOINC code mapping
 - Searchable observations
 
-**Branch 2B: ML Analysis** 🤖
+**Branch 2B: ML Analysis**
 ```
 PostgreSQL → ML Service (External) → Sleep Quality Scores
 ```
 - Backend infrastructure ready (database tables, API endpoints)
 - ML service integration pending external delivery
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Option 1: Docker (Recommended)
 
@@ -72,25 +72,25 @@ cargo run
 # Frontend served at http://localhost:3000/
 ```
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 sleep-monitoring-project/
-├── backend/              # Rust backend server
-│   ├── src/             # Source code
-│   ├── migrations/      # Database migrations
-│   ├── tests/           # Unit & integration tests
-│   └── README.md        # Detailed backend documentation
-├── frontend/            # Web dashboard
-│   ├── index.html       # Main dashboard
-│   ├── css/            # Styles
-│   └── js/             # Client-side logic
-├── docker-compose.yml   # Docker orchestration
-├── Dockerfile          # Backend container
-└── README.md           # This file
+├── backend/ # Rust backend server
+│ ├── src/ # Source code
+│ ├── migrations/ # Database migrations
+│ ├── tests/ # Unit & integration tests
+│ └── README.md # Detailed backend documentation
+├── frontend/ # Web dashboard
+│ ├── index.html # Main dashboard
+│ ├── css/ # Styles
+│ └── js/ # Client-side logic
+├── docker-compose.yml # Docker orchestration
+├── Dockerfile # Backend container
+└── README.md # This file
 ```
 
-## 🔌 API Endpoints
+## API Endpoints
 
 ### Authentication
 - `POST /api/auth/token` - Generate JWT token for Pi devices
@@ -113,22 +113,22 @@ sleep-monitoring-project/
 ### Health
 - `GET /health` - Server health check
 
-## 🔒 Security
+## Security
 
 **Current Implementation:**
-- ✅ JWT authentication for data ingestion
-- ✅ Input validation (range checks)
-- ✅ SQL injection prevention (parameterized queries)
-- ✅ Structured logging with tracing
+- JWT authentication for data ingestion
+- Input validation (range checks)
+- SQL injection prevention (parameterized queries)
+- Structured logging with tracing
 
 **Production Recommendations:**
-- ⚠️ Change default JWT_SECRET to secure random value
-- ⚠️ Restrict CORS to specific frontend domain(s)
-- ⚠️ Add rate limiting per device
-- ⚠️ Enable HTTPS/WSS only
-- ⚠️ Implement audit logging
+- Change default JWT_SECRET to secure random value
+- Restrict CORS to specific frontend domain(s)
+- Add rate limiting per device
+- Enable HTTPS/WSS only
+- Implement audit logging
 
-## 🗄️ Database
+## Database
 
 ### PostgreSQL Tables
 - `sensor_readings` - Raw sensor data
@@ -143,7 +143,7 @@ sleep-monitoring-project/
 - TTL: 2 hours
 - **Note:** Resets on container restart (no persistence configured)
 
-## 🧪 Testing
+## Testing
 
 ```bash
 # Run backend tests
@@ -157,7 +157,7 @@ cargo test
 ./test_branch_2a.sh
 ```
 
-## 📊 Monitoring
+## Monitoring
 
 **Available Metrics:**
 - Server uptime
@@ -171,7 +171,7 @@ cargo test
 curl http://localhost:3000/health
 ```
 
-## 🔧 Configuration
+## Configuration
 
 ### Environment Variables
 
@@ -193,7 +193,7 @@ JWT_SECRET=your-production-secret
 POSTGRES_PASSWORD=secure-password
 ```
 
-## 📚 Documentation
+## Documentation
 
 - `backend/README.md` - Comprehensive backend documentation
 - `backend/QUICK_REFERENCE.md` - API quick reference
@@ -202,7 +202,7 @@ POSTGRES_PASSWORD=secure-password
 - `DOCKER_GUIDE.md` - Docker deployment guide
 - `FINAL_REQUIREMENTS_DOCUMENTATION.md` - Complete requirements spec
 
-## 🐛 Troubleshooting
+## Troubleshooting
 
 **Backend won't start:**
 - Check PostgreSQL is running: `psql -h localhost -U postgres`
@@ -223,30 +223,30 @@ POSTGRES_PASSWORD=secure-password
 - Check browser console for errors
 - Verify URL: `ws://localhost:3000/ws`
 
-## 📝 System Features
+## System Features
 
-- ✅ Real-time WebSocket streaming
-- ✅ JWT authentication for Pi devices
-- ✅ PostgreSQL data persistence
-- ✅ Redis caching (last 100 readings)
-- ✅ FHIR R4 compliance
-- ✅ Input validation & error handling
-- ✅ Docker deployment
-- ✅ Comprehensive testing (30+ tests)
-- ✅ Structured logging
-- ✅ Health check endpoints
-- ✅ REST API with authentication
-- ✅ ML-ready infrastructure (database tables and API endpoints)
+- Real-time WebSocket streaming
+- JWT authentication for Pi devices
+- PostgreSQL data persistence
+- Redis caching (last 100 readings)
+- FHIR R4 compliance
+- Input validation & error handling
+- Docker deployment
+- Comprehensive testing (30+ tests)
+- Structured logging
+- Health check endpoints
+- REST API with authentication
+- ML-ready infrastructure (database tables and API endpoints)
 
-## 📄 License
+## License
 
 Educational/University Project
 
-## 👥 Contributing
+## Contributing
 
 This is a university project. For questions or issues, refer to the documentation or contact the project team.
 
-## 🔗 Related Resources
+## Related Resources
 
 - [Rust Axum Framework](https://github.com/tokio-rs/axum)
 - [FHIR R4 Specification](https://www.hl7.org/fhir/)
@@ -256,5 +256,7 @@ This is a university project. For questions or issues, refer to the documentatio
 
 ---
 
-**Last Updated:** January 7, 2026  
+**Last Updated:** January 7, 2026 
 **Version:** 1.0.0
+
+

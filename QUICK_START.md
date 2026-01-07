@@ -4,7 +4,7 @@
 
 ---
 
-## 🚀 Fastest Way to Run
+## Fastest Way to Run
 
 ```bash
 # One command to start everything with Docker
@@ -20,7 +20,7 @@ That's it! System is running with PostgreSQL, Redis, and backend.
 
 ---
 
-## 📋 What You Need
+## What You Need
 
 ### For Docker (Recommended)
 - Docker Desktop installed
@@ -35,7 +35,7 @@ That's it! System is running with PostgreSQL, Redis, and backend.
 
 ---
 
-## 🔑 Quick Commands
+## Quick Commands
 
 ### Docker Management
 ```bash
@@ -56,21 +56,21 @@ docker-compose down -v
 ```bash
 # Get authentication token
 curl -X POST http://localhost:3000/api/auth/token \
-  -H "Content-Type: application/json" \
-  -d '{"device_id":"test-pi"}'
+ -H "Content-Type: application/json" \
+ -d '{"device_id":"test-pi"}'
 
 # Use token to send data (replace YOUR_TOKEN)
 curl -X POST http://localhost:3000/api/sensor-data \
-  -H "Authorization: Bearer YOUR_TOKEN" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "temp": 22.5,
-    "hum": 45.0,
-    "motion": false,
-    "sound_db": 35.2,
-    "deviceid": "test-pi",
-    "timestamp": "2026-01-07T12:00:00Z"
-  }'
+ -H "Authorization: Bearer YOUR_TOKEN" \
+ -H "Content-Type: application/json" \
+ -d '{
+ "temp": 22.5,
+ "hum": 45.0,
+ "motion": false,
+ "sound_db": 35.2,
+ "deviceid": "test-pi",
+ "timestamp": "2026-01-07T12:00:00Z"
+ }'
 
 # Check health
 curl http://localhost:3000/health
@@ -78,7 +78,7 @@ curl http://localhost:3000/health
 
 ---
 
-## 📚 Documentation Guide
+## Documentation Guide
 
 | Need to... | Read this |
 |------------|-----------|
@@ -93,7 +93,7 @@ curl http://localhost:3000/health
 
 ---
 
-## ⚠️ Important Security Notes
+## Important Security Notes
 
 ### Before Production Deployment
 
@@ -111,7 +111,7 @@ JWT_SECRET=<your-generated-secret>
 2. **Database Password**
 ```bash
 # In docker-compose.yml, change:
-POSTGRES_PASSWORD=password  # <- Change this!
+POSTGRES_PASSWORD=password # <- Change this!
 ```
 
 3. **CORS Configuration**
@@ -122,7 +122,7 @@ See `SECURITY.md` for complete checklist.
 
 ---
 
-## 🧪 Quick Test
+## Quick Test
 
 ```bash
 # 1. Start system
@@ -140,7 +140,7 @@ curl http://localhost:3000/health
 
 ---
 
-## 🐛 Troubleshooting
+## Troubleshooting
 
 ### Docker won't start
 ```bash
@@ -148,8 +148,8 @@ curl http://localhost:3000/health
 docker --version
 
 # Check ports are free
-netstat -ano | findstr :3000  # Windows
-lsof -i :3000                 # macOS/Linux
+netstat -ano | findstr :3000 # Windows
+lsof -i :3000 # macOS/Linux
 ```
 
 ### Backend shows migration warning
@@ -164,21 +164,21 @@ lsof -i :3000                 # macOS/Linux
 
 ---
 
-## 📊 System Architecture
+## System Architecture
 
 ```
 ┌─────────────────┐
-│  Raspberry Pi   │ (Sensors)
+│ Raspberry Pi │ (Sensors)
 └────────┬────────┘
-         │ HTTP POST with JWT
-         ↓
+ │ HTTP POST with JWT
+ ↓
 ┌─────────────────┐
-│  Rust Backend   │ (Port 3000)
-│  + Frontend     │
+│ Rust Backend │ (Port 3000)
+│ + Frontend │
 └────────┬────────┘
-         │
-    ┌────┴────┐
-    ↓         ↓
+ │
+ ┌────┴────┐
+ ↓ ↓
 ┌─────────┐ ┌──────┐
 │PostgreSQL│ │ Redis│
 │(Persist) │ │(Cache)│
@@ -194,24 +194,24 @@ lsof -i :3000                 # macOS/Linux
 
 ---
 
-## 🎯 Project Status
+## Project Status
 
 | Component | Status |
 |-----------|--------|
-| Backend | ✅ Production Ready |
-| Frontend | ✅ Production Ready |
-| Database | ✅ Working |
-| Redis Cache | ✅ Working |
-| Authentication | ✅ Implemented |
-| FHIR API | ✅ Implemented |
-| Docker Setup | ✅ Working |
-| ML Service | ⏳ Pending Delivery |
+| Backend | [OK] Production Ready |
+| Frontend | [OK] Production Ready |
+| Database | [OK] Working |
+| Redis Cache | [OK] Working |
+| Authentication | [OK] Implemented |
+| FHIR API | [OK] Implemented |
+| Docker Setup | [OK] Working |
+| ML Service | [Pending] Pending Delivery |
 
 **Overall:** 95% Complete (awaiting ML service)
 
 ---
 
-## 🔗 Quick Links
+## Quick Links
 
 - Backend API: http://localhost:3000/api
 - Health Check: http://localhost:3000/health
@@ -220,7 +220,7 @@ lsof -i :3000                 # macOS/Linux
 
 ---
 
-## 💡 Pro Tips
+## Pro Tips
 
 1. **First time?** Use Docker - it's easier
 2. **Developing?** Use local setup for faster iteration
@@ -230,7 +230,7 @@ lsof -i :3000                 # macOS/Linux
 
 ---
 
-## 📞 Need Help?
+## Need Help?
 
 1. Check relevant README in folder
 2. Review troubleshooting sections
@@ -239,5 +239,7 @@ lsof -i :3000                 # macOS/Linux
 
 ---
 
-**System Ready!** 🎉  
+**System Ready!** 
 Open http://localhost:3000 to get started.
+
+

@@ -9,36 +9,36 @@ Complete guide to test FHIR conversion functionality.
 ### Required Software
 
 1. **PostgreSQL** (database)
-   ```bash
-   # Check if installed
-   psql --version
-   
-   # Install if needed
-   sudo apt-get install postgresql postgresql-contrib  # Ubuntu/Debian
-   brew install postgresql                              # macOS
-   ```
+ ```bash
+ # Check if installed
+ psql --version
+ 
+ # Install if needed
+ sudo apt-get install postgresql postgresql-contrib # Ubuntu/Debian
+ brew install postgresql # macOS
+ ```
 
 2. **Redis** (for Branch 1)
-   ```bash
-   # Check if installed
-   redis-cli --version
-   
-   # Install if needed
-   sudo apt-get install redis-server  # Ubuntu/Debian
-   brew install redis                  # macOS
-   ```
+ ```bash
+ # Check if installed
+ redis-cli --version
+ 
+ # Install if needed
+ sudo apt-get install redis-server # Ubuntu/Debian
+ brew install redis # macOS
+ ```
 
 3. **Rust** (backend)
-   ```bash
-   rustc --version
-   cargo --version
-   ```
+ ```bash
+ rustc --version
+ cargo --version
+ ```
 
 4. **jq** (JSON formatting - optional but helpful)
-   ```bash
-   sudo apt-get install jq  # Ubuntu/Debian
-   brew install jq          # macOS
-   ```
+ ```bash
+ sudo apt-get install jq # Ubuntu/Debian
+ brew install jq # macOS
+ ```
 
 ---
 
@@ -59,14 +59,14 @@ RUST_LOG=info cargo run
 ```
 
 **The test script automatically:**
-- ✅ Checks health endpoint (public)
-- ✅ Gets JWT authentication token
-- ✅ Sends test sensor data (with token)
-- ✅ Verifies PostgreSQL storage
-- ✅ Checks FHIR conversion (4 observations per reading)
-- ✅ Tests all FHIR API endpoints (with token)
-- ✅ Validates search filters
-- ✅ Sends multiple test readings (authenticated)
+- Checks health endpoint (public)
+- Gets JWT authentication token
+- Sends test sensor data (with token)
+- Verifies PostgreSQL storage
+- Checks FHIR conversion (4 observations per reading)
+- Tests all FHIR API endpoints (with token)
+- Validates search filters
+- Sends multiple test readings (authenticated)
 
 ---
 
@@ -76,8 +76,8 @@ RUST_LOG=info cargo run
 
 ```bash
 # Start PostgreSQL
-sudo systemctl start postgresql  # Linux
-brew services start postgresql   # macOS
+sudo systemctl start postgresql # Linux
+brew services start postgresql # macOS
 
 # Create database
 sudo -u postgres psql
@@ -106,20 +106,20 @@ export REDIS_URL="redis://127.0.0.1:6379"
 RUST_LOG=info cargo run
 
 # Expected output:
-# 🚀 Starting Sleep Monitoring Backend
-# 🔧 Connecting to PostgreSQL...
-# ✅ PostgreSQL connected successfully
-# 🔧 Running database migrations...
-# ✅ Database migrations complete
-# 🔧 Connecting to Redis at: redis://127.0.0.1:6379
-# ✅ Redis connected successfully
-# 🚀 Sleep Monitoring Backend - READY
-#    Server: http://0.0.0.0:3000
-#    WebSocket: ws://0.0.0.0:3000/ws
-#    API: POST /api/sensor-data
-#    Health: GET /health
-#    PostgreSQL: Connected ✅
-#    Redis: Connected ✅
+# Starting Sleep Monitoring Backend
+# Connecting to PostgreSQL...
+# PostgreSQL connected successfully
+# Running database migrations...
+# Database migrations complete
+# Connecting to Redis at: redis://127.0.0.1:6379
+# Redis connected successfully
+# Sleep Monitoring Backend - READY
+# Server: http://0.0.0.0:3000
+# WebSocket: ws://0.0.0.0:3000/ws
+# API: POST /api/sensor-data
+# Health: GET /health
+# PostgreSQL: Connected 
+# Redis: Connected 
 ```
 
 ---
@@ -133,14 +133,14 @@ curl http://localhost:3000/health | jq '.'
 **Expected response:**
 ```json
 {
-  "status": "healthy",
-  "redis": "connected",
-  "uptime_seconds": 5,
-  "timestamp": "2024-12-30T10:00:00Z"
+ "status": "healthy",
+ "redis": "connected",
+ "uptime_seconds": 5,
+ "timestamp": "2024-12-30T10:00:00Z"
 }
 ```
 
-✅ **Success:** Status is "healthy"  
+ **Success:** Status is "healthy" 
 ❌ **Failure:** Check PostgreSQL and Redis are running
 
 ---
@@ -149,16 +149,16 @@ curl http://localhost:3000/health | jq '.'
 
 ```bash
 curl -X POST http://localhost:3000/api/auth/token \
-  -H "Content-Type: application/json" \
-  -d '{"device_id":"pi-001"}' | jq '.'
+ -H "Content-Type: application/json" \
+ -d '{"device_id":"pi-001"}' | jq '.'
 ```
 
 **Expected response:**
 ```json
 {
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-  "token_type": "Bearer",
-  "expires_in": 86400
+ "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+ "token_type": "Bearer",
+ "expires_in": 86400
 }
 ```
 
@@ -167,7 +167,7 @@ curl -X POST http://localhost:3000/api/auth/token \
 TOKEN="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
 ```
 
-✅ **Success:** Token received  
+ **Success:** Token received 
 ❌ **Failure:** Check backend is running
 
 ---
@@ -176,23 +176,23 @@ TOKEN="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
 
 ```bash
 curl -X POST http://localhost:3000/api/sensor-data \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer $TOKEN" \
-  -d '{
-    "temp": 22.5,
-    "hum": 45.0,
-    "motion": false,
-    "sound_db": 35.2,
-    "deviceid": "pi-001",
-    "timestamp": "2024-12-30T10:00:00Z"
-  }'
+ -H "Content-Type: application/json" \
+ -H "Authorization: Bearer $TOKEN" \
+ -d '{
+ "temp": 22.5,
+ "hum": 45.0,
+ "motion": false,
+ "sound_db": 35.2,
+ "deviceid": "pi-001",
+ "timestamp": "2024-12-30T10:00:00Z"
+ }'
 ```
 
 **Expected response:**
 ```json
 {
-  "status": "ok",
-  "message": "Data received and stored successfully"
+ "status": "ok",
+ "message": "Data received and stored successfully"
 }
 ```
 
@@ -206,7 +206,7 @@ DEBUG: Converting to FHIR observations...
 INFO: FHIR conversion complete: 4 observations created
 ```
 
-✅ **Success:** All log messages appear  
+ **Success:** All log messages appear 
 ❌ **Failure:** Check DATABASE_URL and REDIS_URL
 
 ---
@@ -216,27 +216,27 @@ INFO: FHIR conversion complete: 4 observations created
 ```bash
 # Check sensor_readings table
 sudo -u postgres psql -d sleep_monitor -c "
-  SELECT 
-    device_id, 
-    temperature, 
-    humidity, 
-    sound_level, 
-    motion_detected, 
-    reading_timestamp 
-  FROM sensor_readings 
-  ORDER BY created_at DESC 
-  LIMIT 1;
+ SELECT 
+ device_id, 
+ temperature, 
+ humidity, 
+ sound_level, 
+ motion_detected, 
+ reading_timestamp 
+ FROM sensor_readings 
+ ORDER BY created_at DESC 
+ LIMIT 1;
 "
 ```
 
 **Expected output:**
 ```
- device_id | temperature | humidity | sound_level | motion_detected |   reading_timestamp    
+ device_id | temperature | humidity | sound_level | motion_detected | reading_timestamp 
 -----------+-------------+----------+-------------+-----------------+------------------------
- pi-001    |       22.50 |    45.00 |       35.20 | f               | 2024-12-26 15:30:00+00
+ pi-001 | 22.50 | 45.00 | 35.20 | f | 2024-12-26 15:30:00+00
 ```
 
-✅ **Success:** One row with your test data  
+ **Success:** One row with your test data 
 ❌ **Failure:** Check PostgreSQL connection and logs
 
 ---
@@ -246,8 +246,8 @@ sudo -u postgres psql -d sleep_monitor -c "
 ```bash
 # Count FHIR observations (should be 4 per sensor reading)
 sudo -u postgres psql -d sleep_monitor -c "
-  SELECT COUNT(*) as total_observations 
-  FROM fhir_observations;
+ SELECT COUNT(*) as total_observations 
+ FROM fhir_observations;
 "
 ```
 
@@ -255,35 +255,35 @@ sudo -u postgres psql -d sleep_monitor -c "
 ```
  total_observations 
 --------------------
-                  4
+ 4
 ```
 
 **View FHIR observation details:**
 ```bash
 sudo -u postgres psql -d sleep_monitor -c "
-  SELECT 
-    fhir_id, 
-    loinc_code, 
-    observation_category,
-    resource_data->'valueQuantity'->>'value' as value,
-    resource_data->'valueBoolean' as boolean_value
-  FROM fhir_observations 
-  ORDER BY created_at DESC 
-  LIMIT 4;
+ SELECT 
+ fhir_id, 
+ loinc_code, 
+ observation_category,
+ resource_data->'valueQuantity'->>'value' as value,
+ resource_data->'valueBoolean' as boolean_value
+ FROM fhir_observations 
+ ORDER BY created_at DESC 
+ LIMIT 4;
 "
 ```
 
 **Expected output:**
 ```
-              fhir_id              |    loinc_code     | observation_category | value | boolean_value 
+ fhir_id | loinc_code | observation_category | value | boolean_value 
 -----------------------------------+-------------------+----------------------+-------+---------------
- obs-<UUID>-temp                   | CUSTOM-TEMP-001   | Vital Signs          | 22.5  | 
- obs-<UUID>-hum                    | CUSTOM-HUM-001    | Environmental...     | 45    | 
- obs-<UUID>-sound                  | CUSTOM-SOUND-001  | Environmental...     | 35.2  | 
- obs-<UUID>-motion                 | CUSTOM-MOTION-001 | Activity...          |       | false
+ obs-<UUID>-temp | CUSTOM-TEMP-001 | Vital Signs | 22.5 | 
+ obs-<UUID>-hum | CUSTOM-HUM-001 | Environmental... | 45 | 
+ obs-<UUID>-sound | CUSTOM-SOUND-001 | Environmental... | 35.2 | 
+ obs-<UUID>-motion | CUSTOM-MOTION-001 | Activity... | | false
 ```
 
-✅ **Success:** 4 observations with different LOINC codes  
+ **Success:** 4 observations with different LOINC codes 
 ❌ **Failure:** Check FHIR conversion logs
 
 ---
@@ -297,39 +297,39 @@ curl "http://localhost:3000/api/fhir/Observation?_count=10" | jq '.'
 **Expected response:**
 ```json
 {
-  "resourceType": "Bundle",
-  "type": "searchset",
-  "total": 4,
-  "entry": [
-    {
-      "resource": {
-        "resourceType": "Observation",
-        "id": "obs-<UUID>-temp",
-        "status": "final",
-        "category": [...],
-        "code": {
-          "coding": [{
-            "system": "http://loinc.org",
-            "code": "CUSTOM-TEMP-001",
-            "display": "Ambient Temperature"
-          }],
-          "text": "Temperature"
-        },
-        "effectiveDateTime": "2024-12-26T15:30:00Z",
-        "valueQuantity": {
-          "value": 22.5,
-          "unit": "°C",
-          "system": "http://unitsofmeasure.org",
-          "code": "Cel"
-        }
-      }
-    }
-    // ... 3 more observations
-  ]
+ "resourceType": "Bundle",
+ "type": "searchset",
+ "total": 4,
+ "entry": [
+ {
+ "resource": {
+ "resourceType": "Observation",
+ "id": "obs-<UUID>-temp",
+ "status": "final",
+ "category": [...],
+ "code": {
+ "coding": [{
+ "system": "http://loinc.org",
+ "code": "CUSTOM-TEMP-001",
+ "display": "Ambient Temperature"
+ }],
+ "text": "Temperature"
+ },
+ "effectiveDateTime": "2024-12-26T15:30:00Z",
+ "valueQuantity": {
+ "value": 22.5,
+ "unit": "°C",
+ "system": "http://unitsofmeasure.org",
+ "code": "Cel"
+ }
+ }
+ }
+ // ... 3 more observations
+ ]
 }
 ```
 
-✅ **Success:** Bundle with 4 observations  
+ **Success:** Bundle with 4 observations 
 ❌ **Failure:** Check FHIR API routes
 
 ---
@@ -345,7 +345,7 @@ curl "http://localhost:3000/api/fhir/Observation?patient=Device/pi-001" | jq '.t
 4
 ```
 
-✅ **Success:** Returns 4 (all observations for pi-001)  
+ **Success:** Returns 4 (all observations for pi-001) 
 ❌ **Failure:** Check patient_id in database
 
 ---
@@ -372,7 +372,7 @@ curl "http://localhost:3000/api/fhir/Observation?code=CUSTOM-HUM-001" | jq '.tot
 1
 ```
 
-✅ **Success:** Returns 1 for each observation type  
+ **Success:** Returns 1 for each observation type 
 ❌ **Failure:** Check LOINC codes in database
 
 ---
@@ -393,7 +393,7 @@ curl "http://localhost:3000/api/fhir/Observation/$FHIR_ID" | jq '.code.text, .va
 22.5
 ```
 
-✅ **Success:** Returns specific observation  
+ **Success:** Returns specific observation 
 ❌ **Failure:** Check observation ID exists
 
 ---
@@ -403,23 +403,23 @@ curl "http://localhost:3000/api/fhir/Observation/$FHIR_ID" | jq '.code.text, .va
 ```bash
 # Send 5 readings with different values
 for i in {1..5}; do
-  TEMP=$(echo "scale=1; 20 + $i * 0.5" | bc)
-  HUM=$(echo "scale=1; 40 + $i * 2" | bc)
-  SOUND=$(echo "scale=1; 30 + $i * 3" | bc)
-  
-  curl -s -X POST http://localhost:3000/api/sensor-data \
-    -H "Content-Type: application/json" \
-    -d "{
-      \"temp\": $TEMP,
-      \"hum\": $HUM,
-      \"motion\": false,
-      \"sound_db\": $SOUND,
-      \"deviceid\": \"pi-001\",
-      \"timestamp\": \"2024-12-26T15:3${i}:00Z\"
-    }"
-  
-  echo "Sent reading $i (temp: ${TEMP}°C)"
-  sleep 0.5
+ TEMP=$(echo "scale=1; 20 + $i * 0.5" | bc)
+ HUM=$(echo "scale=1; 40 + $i * 2" | bc)
+ SOUND=$(echo "scale=1; 30 + $i * 3" | bc)
+ 
+ curl -s -X POST http://localhost:3000/api/sensor-data \
+ -H "Content-Type: application/json" \
+ -d "{
+ \"temp\": $TEMP,
+ \"hum\": $HUM,
+ \"motion\": false,
+ \"sound_db\": $SOUND,
+ \"deviceid\": \"pi-001\",
+ \"timestamp\": \"2024-12-26T15:3${i}:00Z\"
+ }"
+ 
+ echo "Sent reading $i (temp: ${TEMP}°C)"
+ sleep 0.5
 done
 ```
 
@@ -434,7 +434,7 @@ sudo -u postgres psql -t -d sleep_monitor -c "SELECT COUNT(*) FROM fhir_observat
 # Expected: 24
 ```
 
-✅ **Success:** Correct counts (1:4 ratio)  
+ **Success:** Correct counts (1:4 ratio) 
 ❌ **Failure:** Check FHIR conversion is running
 
 ---
@@ -444,27 +444,27 @@ sudo -u postgres psql -t -d sleep_monitor -c "SELECT COUNT(*) FROM fhir_observat
 ```bash
 # Check if every sensor reading has exactly 4 FHIR observations
 sudo -u postgres psql -d sleep_monitor -c "
-  SELECT 
-    sr.id as sensor_reading_id,
-    COUNT(fo.id) as fhir_obs_count
-  FROM sensor_readings sr
-  LEFT JOIN fhir_observations fo ON sr.id = fo.sensor_reading_id
-  GROUP BY sr.id
-  ORDER BY sr.created_at DESC;
+ SELECT 
+ sr.id as sensor_reading_id,
+ COUNT(fo.id) as fhir_obs_count
+ FROM sensor_readings sr
+ LEFT JOIN fhir_observations fo ON sr.id = fo.sensor_reading_id
+ GROUP BY sr.id
+ ORDER BY sr.created_at DESC;
 "
 ```
 
 **Expected output:**
 ```
-           sensor_reading_id            | fhir_obs_count 
+ sensor_reading_id | fhir_obs_count 
 ----------------------------------------+----------------
- 123e4567-e89b-12d3-a456-426614174000  |              4
- 234e5678-e89b-12d3-a456-426614174001  |              4
- 345e6789-e89b-12d3-a456-426614174002  |              4
+ 123e4567-e89b-12d3-a456-426614174000 | 4
+ 234e5678-e89b-12d3-a456-426614174001 | 4
+ 345e6789-e89b-12d3-a456-426614174002 | 4
  ...
 ```
 
-✅ **Success:** Every reading has exactly 4 observations  
+ **Success:** Every reading has exactly 4 observations 
 ❌ **Failure:** FHIR conversion may have failed for some readings
 
 ---
@@ -546,15 +546,15 @@ curl "http://localhost:3000/api/fhir/Observation?_count=100"
 
 **Branch 2A is working correctly if:**
 
-✅ Backend starts without errors  
-✅ Health check returns "healthy"  
-✅ Sensor data is stored in sensor_readings table  
-✅ **4 FHIR observations are created per sensor reading**  
-✅ FHIR observations are stored in fhir_observations table  
-✅ GET /api/fhir/Observation returns Bundle  
-✅ Search filters work (patient, code, _count)  
-✅ GET /api/fhir/Observation/:id returns single observation  
-✅ Data ratio is 1:4 (readings:observations)  
+ Backend starts without errors 
+ Health check returns "healthy" 
+ Sensor data is stored in sensor_readings table 
+ **4 FHIR observations are created per sensor reading** 
+ FHIR observations are stored in fhir_observations table 
+ GET /api/fhir/Observation returns Bundle 
+ Search filters work (patient, code, _count) 
+ GET /api/fhir/Observation/:id returns single observation 
+ Data ratio is 1:4 (readings:observations) 
 
 ---
 
@@ -563,18 +563,20 @@ curl "http://localhost:3000/api/fhir/Observation?_count=100"
 Once Branch 2A is verified:
 
 1. **Move to Branch 2B (ML Processing)**
-   - Implement sleep quality scoring
-   - Add ML results API endpoints
-   
+ - Implement sleep quality scoring
+ - Add ML results API endpoints
+ 
 2. **Update Frontend**
-   - (Optional) Display FHIR data
-   - Add ML results visualization
+ - (Optional) Display FHIR data
+ - Add ML results visualization
 
 3. **Production Deployment**
-   - Add authentication
-   - Performance optimization
-   - Monitoring setup
+ - Add authentication
+ - Performance optimization
+ - Monitoring setup
 
 ---
 
-**Ready to test? Run `./test_branch_2a.sh`** 🧪
+**Ready to test? Run `./test_branch_2a.sh`** 
+
+

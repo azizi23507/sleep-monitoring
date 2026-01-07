@@ -6,114 +6,114 @@ Rust backend server for non-invasive sleep monitoring system with JWT authentica
 
 This backend implements a **3-branch architecture** for processing sensor data:
 
-### Branch 1: Real-time Streaming ⚡ (IMPLEMENTED ✅)
+### Branch 1: Real-time Streaming (IMPLEMENTED)
 - **Path:** Pi → Backend → Redis Cache → WebSocket → Frontend
 - **Purpose:** Zero-latency live monitoring for healthcare staff
 - **Storage:** Last 100 readings in Redis (key: "sensor:latest")
 - **TTL:** 2 hours auto-expiry
 - **Update Frequency:** Continuous (1-second WebSocket interval)
 - **Authentication:** WebSocket requires JWT token
-- **Status:** ✅ Fully implemented
+- **Status:** Fully implemented
 
-### Branch 2A: FHIR Conversion 🔄 (IMPLEMENTED ✅)
+### Branch 2A: FHIR Conversion (IMPLEMENTED)
 - **Path:** Pi → Backend → PostgreSQL → FHIR Converter → FHIR API
 - **Purpose:** Healthcare interoperability with external hospital systems
 - **Standards:** FHIR R4 Observation resources with LOINC codes
 - **Conversions:** 4 observations per reading (temp, humidity, sound, motion)
 - **Storage:** JSONB format in `fhir_observations` table
 - **API:** Full FHIR search API with filters
-- **Status:** ✅ Fully implemented
+- **Status:** Fully implemented
 
-### Branch 2B: ML Processing 🤖 (INFRASTRUCTURE READY)
+### Branch 2B: ML Processing (INFRASTRUCTURE READY)
 - **Path:** Pi → Backend → PostgreSQL → Python ML Service (external) → Results
 - **Purpose:** Sleep quality analysis and classification
 - **Processing:** Nightly batch analysis (not real-time)
 - **Tables:** `sleep_records`, `ml_processing_log` created
 - **API:** ML results endpoints implemented
-- **Status:** ⚠️ Backend infrastructure ready, Python ML service pending delivery
+- **Status:** Warning - Backend infrastructure ready, Python ML service pending delivery
 
 ---
 
 ## Current Implementation Status
 
-### ✅ Implemented Features (All 10 Requirements Met)
+### Implemented Features (All 10 Requirements Met)
 
-**1. Development Environment ✅**
-- [x] .gitignore and .env.example created
-- [x] Modular project structure
-- [x] Cross-platform compatibility
-- [x] Configuration separated from code
+**1. Development Environment**
+- .gitignore and .env.example created
+- Modular project structure
+- Cross-platform compatibility
+- Configuration separated from code
 
-**2. Testing ✅**
-- [x] 30 unit tests (auth, validation, FHIR)
-- [x] Integration test structure
-- [x] >60% code coverage on core logic
-- [x] Edge case testing
+**2. Testing**
+- 30 unit tests (auth, validation, FHIR)
+- Integration test structure
+- >60% code coverage on core logic
+- Edge case testing
 
-**3. Configuration Management ✅**
-- [x] Environment-based configuration
-- [x] Manual environment switching
-- [x] No hardcoded secrets
-- [x] DATABASE_URL, JWT_SECRET externalized
+**3. Configuration Management**
+- Environment-based configuration
+- Manual environment switching
+- No hardcoded secrets
+- DATABASE_URL, JWT_SECRET externalized
 
-**4. Logging ✅**
-- [x] Structured logging with tracing
-- [x] Timestamps on all logs
-- [x] Multiple log levels (INFO, WARN, ERROR, DEBUG)
-- [x] Request tracing with context
+**4. Logging**
+- Structured logging with tracing
+- Timestamps on all logs
+- Multiple log levels (INFO, WARN, ERROR, DEBUG)
+- Request tracing with context
 
-**5. Deployment & Architecture ✅**
-- [x] Modular code organization
-- [x] Clear separation of concerns
-- [x] Production-ready structure
-- [x] Comprehensive documentation
+**5. Deployment & Architecture**
+- Modular code organization
+- Clear separation of concerns
+- Production-ready structure
+- Comprehensive documentation
 
-**6. Input Validation & Security ✅**
-- [x] Range validation (temp: -50 to 50°C, hum: 0-100%, sound: 0-120dB)
-- [x] Type validation via Rust type system
-- [x] SQL injection prevention (parameterized queries)
-- [x] Comprehensive error messages
+**6. Input Validation & Security**
+- Range validation (temp: -50 to 50°C, hum: 0-100%, sound: 0-120dB)
+- Type validation via Rust type system
+- SQL injection prevention (parameterized queries)
+- Comprehensive error messages
 
-**7. Error Handling ✅**
-- [x] Custom error types (thiserror)
-- [x] All errors caught and logged
-- [x] Safe user-facing messages
-- [x] No panics in production code
+**7. Error Handling**
+- Custom error types (thiserror)
+- All errors caught and logged
+- Safe user-facing messages
+- No panics in production code
 
-**8. Authentication & Encryption ✅**
-- [x] JWT token-based authentication for Pi devices
-- [x] Token generation endpoint (POST /api/auth/token)
-- [x] Protected sensor data endpoint (POST /api/sensor-data)
-- [x] 24-hour token expiration
-- [x] Middleware authentication for data ingestion
+**8. Authentication & Encryption**
+- JWT token-based authentication for Pi devices
+- Token generation endpoint (POST /api/auth/token)
+- Protected sensor data endpoint (POST /api/sensor-data)
+- 24-hour token expiration
+- Middleware authentication for data ingestion
 
-**9. Fault-tolerance ✅**
-- [x] Graceful error recovery
-- [x] WebSocket auto-reconnect
-- [x] Database error handling
-- [x] Redis failure fallback
+**9. Fault-tolerance**
+- Graceful error recovery
+- WebSocket auto-reconnect
+- Database error handling
+- Redis failure fallback
 
-**10. FHIR Compliance ✅**
-- [x] Full FHIR R4 Observation resources
-- [x] LOINC code mapping
-- [x] FHIR search API
-- [x] JSONB storage with GIN indexing
-- [x] Bundle responses
+**10. FHIR Compliance**
+- Full FHIR R4 Observation resources
+- LOINC code mapping
+- FHIR search API
+- JSONB storage with GIN indexing
+- Bundle responses
 
 **Additional Features:**
-- [x] Real-time WebSocket streaming
-- [x] Redis cache for reconnection backup
-- [x] Broadcast channel for instant notifications
-- [x] Static file serving for frontend
-- [x] CORS support
-- [x] Health check endpoint
-- [x] Comprehensive API documentation
-- [x] Migration scripts (auto-run on startup)
-- [x] Connection pooling (SQLx PgPool)
-- [x] FHIR Observation resource conversion
-- [x] Event-driven WebSocket (zero-latency updates)
-- [x] Docker deployment configuration
-- [x] ML infrastructure ready (database tables and API endpoints)
+- Real-time WebSocket streaming
+- Redis cache for reconnection backup
+- Broadcast channel for instant notifications
+- Static file serving for frontend
+- CORS support
+- Health check endpoint
+- Comprehensive API documentation
+- Migration scripts (auto-run on startup)
+- Connection pooling (SQLx PgPool)
+- FHIR Observation resource conversion
+- Event-driven WebSocket (zero-latency updates)
+- Docker deployment configuration
+- ML infrastructure ready (database tables and API endpoints)
 
 ---
 
@@ -127,31 +127,31 @@ Generate JWT authentication token.
 **Request:**
 ```json
 {
-  "device_id": "pi-001"
+ "device_id": "pi-001"
 }
 ```
 
 **Response:**
 ```json
 {
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-  "token_type": "Bearer",
-  "expires_in": 86400
+ "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+ "token_type": "Bearer",
+ "expires_in": 86400
 }
 ```
 
 **Usage:**
 ```bash
 curl -X POST http://localhost:3000/api/auth/token \
-  -H "Content-Type: application/json" \
-  -d '{"device_id":"pi-001"}'
+ -H "Content-Type: application/json" \
+ -d '{"device_id":"pi-001"}'
 ```
 
 ---
 
 ### Sensor Data
 
-### POST /api/sensor-data (PROTECTED 🔒)
+### POST /api/sensor-data (PROTECTED )
 Receive sensor data from Raspberry Pi.
 
 **Request Headers:**
@@ -163,12 +163,12 @@ Authorization: Bearer <JWT_TOKEN>
 **Request Body:**
 ```json
 {
-  "temp": 22.5,
-  "hum": 45.0,
-  "motion": false,
-  "sound_db": 35.2,
-  "deviceid": "pi-001",
-  "timestamp": "2024-12-26T15:30:00Z"
+ "temp": 22.5,
+ "hum": 45.0,
+ "motion": false,
+ "sound_db": 35.2,
+ "deviceid": "pi-001",
+ "timestamp": "2024-12-26T15:30:00Z"
 }
 ```
 
@@ -194,8 +194,8 @@ WebSocket connection for real-time data streaming.
 const ws = new WebSocket('ws://localhost:3000/ws');
 
 ws.onmessage = (event) => {
-  const data = JSON.parse(event.data);
-  console.log('Received readings:', data.length);
+ const data = JSON.parse(event.data);
+ console.log('Received readings:', data.length);
 };
 ```
 
@@ -205,15 +205,15 @@ Array of last 100 sensor readings as JSON, sent every 1 second.
 **Data Format:**
 ```json
 [
-  {
-    "temp": 22.5,
-    "hum": 45.0,
-    "motion": false,
-    "sound_db": 35.2,
-    "deviceid": "pi-001",
-    "timestamp": "2024-12-26T15:30:00Z"
-  },
-  // ... up to 100 readings
+ {
+ "temp": 22.5,
+ "hum": 45.0,
+ "motion": false,
+ "sound_db": 35.2,
+ "deviceid": "pi-001",
+ "timestamp": "2024-12-26T15:30:00Z"
+ },
+ // ... up to 100 readings
 ]
 ```
 
@@ -266,10 +266,10 @@ Server health status.
 **Response:**
 ```json
 {
-  "status": "healthy",
-  "redis": "connected",
-  "uptime_seconds": 1234,
-  "timestamp": "2024-12-30T10:00:00Z"
+ "status": "healthy",
+ "redis": "connected",
+ "uptime_seconds": 1234,
+ "timestamp": "2024-12-30T10:00:00Z"
 }
 ```
 
@@ -291,20 +291,20 @@ Serves the frontend `index.html` file.
 ```
 sleep-backend/
 ├── src/
-│   ├── main.rs                 # Entry point, server initialization
-│   ├── models/
-│   │   ├── mod.rs              # Models module declaration
-│   │   └── sensor_data.rs      # SensorData struct definition
-│   ├── routes/
-│   │   ├── mod.rs              # Router configuration
-│   │   └── sensor_data.rs      # API endpoint handlers (POST /api/sensor-data)
-│   ├── validation/
-│   │   ├── mod.rs              # Validation module declaration
-│   │   └── sensor.rs           # Input validation logic with tests
-│   └── websocket/
-│       └── mod.rs              # WebSocket server implementation
-├── Cargo.toml                  # Dependencies and project metadata
-└── README.md                   # This file
+│ ├── main.rs # Entry point, server initialization
+│ ├── models/
+│ │ ├── mod.rs # Models module declaration
+│ │ └── sensor_data.rs # SensorData struct definition
+│ ├── routes/
+│ │ ├── mod.rs # Router configuration
+│ │ └── sensor_data.rs # API endpoint handlers (POST /api/sensor-data)
+│ ├── validation/
+│ │ ├── mod.rs # Validation module declaration
+│ │ └── sensor.rs # Input validation logic with tests
+│ └── websocket/
+│ └── mod.rs # WebSocket server implementation
+├── Cargo.toml # Dependencies and project metadata
+└── README.md # This file
 ```
 
 ---
@@ -338,7 +338,7 @@ brew install redis
 redis-server
 
 # Test Redis is running
-redis-cli ping  # Should return "PONG"
+redis-cli ping # Should return "PONG"
 ```
 
 ### Environment Setup
@@ -384,20 +384,20 @@ cargo test
 
 **Output on startup:**
 ```
-🔧 Connecting to PostgreSQL...
-✅ PostgreSQL connected successfully
-✅ Migrations applied
-🔧 Connecting to Redis at: redis://127.0.0.1:6379
-✅ Redis connected successfully
+ Connecting to PostgreSQL...
+ PostgreSQL connected successfully
+ Migrations applied
+ Connecting to Redis at: redis://127.0.0.1:6379
+ Redis connected successfully
 
-🚀 Sleep Monitoring Backend
-   Server: http://0.0.0.0:3000
-   WebSocket: ws://0.0.0.0:3000/ws (requires auth)
-   API: POST /api/sensor-data (requires auth)
-   Auth: POST /api/auth/token (public)
-   Health: GET /health (public)
-   PostgreSQL: Connected ✅
-   Redis: Connected ✅
+ Sleep Monitoring Backend
+ Server: http://0.0.0.0:3000
+ WebSocket: ws://0.0.0.0:3000/ws (requires auth)
+ API: POST /api/sensor-data (requires auth)
+ Auth: POST /api/auth/token (public)
+ Health: GET /health (public)
+ PostgreSQL: Connected 
+ Redis: Connected 
 ```
 
 ---
@@ -407,24 +407,24 @@ cargo test
 ### Get Authentication Token
 ```bash
 curl -X POST http://localhost:3000/api/auth/token \
-  -H "Content-Type: application/json" \
-  -d '{"device_id":"test-device"}'
+ -H "Content-Type: application/json" \
+ -d '{"device_id":"test-device"}'
 ```
 
 ### Send Test Data
 ```bash
 # Use token from above
 curl -X POST http://localhost:3000/api/sensor-data \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer YOUR_TOKEN_HERE" \
-  -d '{
-    "temp": 22.5,
-    "hum": 45.0,
-    "motion": false,
-    "sound_db": 35.2,
-    "deviceid": "pi-001",
-    "timestamp": "2024-12-30T10:00:00Z"
-  }'
+ -H "Content-Type: application/json" \
+ -H "Authorization: Bearer YOUR_TOKEN_HERE" \
+ -d '{
+ "temp": 22.5,
+ "hum": 45.0,
+ "motion": false,
+ "sound_db": 35.2,
+ "deviceid": "pi-001",
+ "timestamp": "2024-12-30T10:00:00Z"
+ }'
 ```
 
 ### Run Complete Test Suite
@@ -442,17 +442,17 @@ cargo run
 
 ```toml
 [dependencies]
-axum = "0.7"                    # Web framework (routing, handlers, middleware)
-tokio = { version = "1.0", features = ["full"] }  # Async runtime
-serde = { version = "1.0", features = ["derive"] }  # JSON serialization
-serde_json = "1.0"              # JSON support for serde
-tower-http = { version = "0.5", features = ["cors", "fs"] }  # CORS + static files
-redis = { version = "0.24", features = ["tokio-comp", "connection-manager"] }  # Redis cache
-tracing = "0.1"                 # Structured logging
-tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }  # Log formatting
-thiserror = "1.0"               # Custom error types
-anyhow = "1.0"                  # Error handling utilities
-chrono = { version = "0.4", features = ["serde"] }  # Date/time handling
+axum = "0.7" # Web framework (routing, handlers, middleware)
+tokio = { version = "1.0", features = ["full"] } # Async runtime
+serde = { version = "1.0", features = ["derive"] } # JSON serialization
+serde_json = "1.0" # JSON support for serde
+tower-http = { version = "0.5", features = ["cors", "fs"] } # CORS + static files
+redis = { version = "0.24", features = ["tokio-comp", "connection-manager"] } # Redis cache
+tracing = "0.1" # Structured logging
+tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] } # Log formatting
+thiserror = "1.0" # Custom error types
+anyhow = "1.0" # Error handling utilities
+chrono = { version = "0.4", features = ["serde"] } # Date/time handling
 ```
 
 **Future dependencies (commented in Cargo.toml):**
@@ -473,15 +473,15 @@ curl http://localhost:3000/health
 **Test sensor data ingestion:**
 ```bash
 curl -X POST http://localhost:3000/api/sensor-data \
-  -H "Content-Type: application/json" \
-  -d '{
-    "temp": 22.5,
-    "hum": 45.0,
-    "motion": false,
-    "sound_db": 35.2,
-    "deviceid": "pi-001",
-    "timestamp": "2024-12-26T15:30:00Z"
-  }'
+ -H "Content-Type: application/json" \
+ -d '{
+ "temp": 22.5,
+ "hum": 45.0,
+ "motion": false,
+ "sound_db": 35.2,
+ "deviceid": "pi-001",
+ "timestamp": "2024-12-26T15:30:00Z"
+ }'
 ```
 
 **Expected output in server logs:**
@@ -492,15 +492,15 @@ INFO ingest_sensor_data{device_id="pi-001"}: Stored in Redis: 22.5°C
 **Test error handling (invalid data):**
 ```bash
 curl -X POST http://localhost:3000/api/sensor-data \
-  -H "Content-Type: application/json" \
-  -d '{
-    "temp": 999,
-    "hum": 50,
-    "motion": false,
-    "sound_db": 40,
-    "deviceid": "test",
-    "timestamp": "2024-12-26T00:00:00Z"
-  }'
+ -H "Content-Type: application/json" \
+ -d '{
+ "temp": 999,
+ "hum": 50,
+ "motion": false,
+ "sound_db": 40,
+ "deviceid": "test",
+ "timestamp": "2024-12-26T00:00:00Z"
+ }'
 
 # Expected: {"error":"Validation failed: Temperature out of range...","status":400}
 ```
@@ -511,9 +511,9 @@ curl -X POST http://localhost:3000/api/sensor-data \
 redis-cli
 
 # View cached data
-LRANGE sensor:latest 0 -1  # View all cached readings
-LLEN sensor:latest         # Count of cached readings (should be ≤ 100)
-TTL sensor:latest          # Time to live (should be ≤ 7200 seconds)
+LRANGE sensor:latest 0 -1 # View all cached readings
+LLEN sensor:latest # Count of cached readings (should be ≤ 100)
+TTL sensor:latest # Time to live (should be ≤ 7200 seconds)
 ```
 
 **Test WebSocket (using `wscat`):**
@@ -538,9 +538,9 @@ cargo test
 ```
 
 Current test coverage:
-- ✅ Validation logic (6 test cases)
-- ⚠️ TODO: Integration tests for endpoints
-- ⚠️ TODO: WebSocket connection tests
+- Validation logic (6 test cases)
+- TODO: Integration tests for endpoints
+- TODO: WebSocket connection tests
 
 ---
 
@@ -569,26 +569,26 @@ RUST_LOG=sleep_backend=debug,tower_http=info cargo run
 ### Port
 Change port in `main.rs`:
 ```rust
-let listener = tokio::net::TcpListener::bind("0.0.0.0:8080")  // Change 3000 to 8080
+let listener = tokio::net::TcpListener::bind("0.0.0.0:8080") // Change 3000 to 8080
 ```
 
 ### Buffer Size
 Adjust buffer size in Redis LTRIM command (sensor_data.rs):
 ```rust
-.arg(99)  // Change to desired size - 1 (e.g., 199 for 200 items)
+.arg(99) // Change to desired size - 1 (e.g., 199 for 200 items)
 ```
 
 ### WebSocket Update Frequency
 Adjust in `websocket/mod.rs`:
 ```rust
-tokio::time::sleep(std::time::Duration::from_millis(1000)).await;  // Change 1000ms
+tokio::time::sleep(std::time::Duration::from_millis(1000)).await; // Change 1000ms
 ```
 
 ### CORS
 Configure CORS in `main.rs`:
 ```rust
 .layer(tower_http::cors::CorsLayer::new()
-    .allow_origin("http://localhost:5173".parse::<HeaderValue>().unwrap())  // Specific origin
+ .allow_origin("http://localhost:5173".parse::<HeaderValue>().unwrap()) // Specific origin
 )
 ```
 
@@ -598,11 +598,11 @@ Configure CORS in `main.rs`:
 
 ### Why Redis for Branch 1?
 **Rationale:** Production-ready caching solution:
-- ✅ Persistent across server restarts
-- ✅ Shared across multiple backend instances
-- ✅ Built-in TTL and eviction policies
-- ✅ Industry-standard caching solution
-- ✅ Automatic reconnection on failures
+- Persistent across server restarts
+- Shared across multiple backend instances
+- Built-in TTL and eviction policies
+- Industry-standard caching solution
+- Automatic reconnection on failures
 
 **Redis Configuration:**
 - Key: `sensor:latest`
@@ -642,7 +642,7 @@ Configure CORS in `main.rs`:
 redis-server
 
 # Solution 2: Check Redis is running
-redis-cli ping  # Should return "PONG"
+redis-cli ping # Should return "PONG"
 
 # Solution 3: Check Redis port
 sudo netstat -tulpn | grep 6379
@@ -702,7 +702,7 @@ redis-cli FLUSHALL
 
 ### Scaling Considerations
 For production deployment:
-1. ✅ Redis already configured (supports multiple instances)
+1. Redis already configured (supports multiple instances)
 2. Add PostgreSQL connection pooling (min: 5, max: 20 connections)
 3. Add rate limiting (e.g., 100 requests/minute per IP)
 4. Enable gzip compression for WebSocket
@@ -715,17 +715,17 @@ For production deployment:
 ## Security Notes
 
 ### Current Status
-- **Authentication:** ✅ JWT tokens required for data ingestion
-- **Authorization:** ⚠️ No role-based access control yet
-- **CORS:** ⚠️ Currently allows all origins (restrict in production)
+- **Authentication:** JWT tokens required for data ingestion
+- **Authorization:** No role-based access control yet
+- **CORS:** Currently allows all origins (restrict in production)
 
 ### Production Recommendations
-1. ~~Add JWT authentication for API endpoints~~ ✅ Implemented
-2. ~~Add device authentication (Pi must authenticate)~~ ✅ Implemented
+1. ~~Add JWT authentication for API endpoints~~ Implemented
+2. ~~Add device authentication (Pi must authenticate)~~ Implemented
 3. Restrict CORS to specific frontend origin (currently allows all)
 4. Add rate limiting per device
 5. Enable HTTPS/WSS only
-6. ~~Add input sanitization (prevent injection)~~ ✅ Implemented
+6. ~~Add input sanitization (prevent injection)~~ Implemented
 7. Implement audit logging
 8. Change default JWT_SECRET from dev values
 
@@ -739,3 +739,6 @@ University project - Educational use only.
 
 **Last Updated:** January 7, 2026
 **Version:** 1.0.0 - Production Ready
+
+
+

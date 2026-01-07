@@ -8,11 +8,13 @@ RUST_LOG=info cargo run
 
 ==================== TERMINAL 2 ====================
 
-cd ~/sleep-backend-updated
-//setup_test.sh: Checks PostgreSQL/Redis installed and running, creates database, applies schema
-./setup_test.sh
-//test_branch_2a.sh: Runs complete test suite - sends fake Pi data, checks database, tests all FHIR API endpoints, verifies everything works
+
+
+ ● Tests all 9 API endpoints (health, auth, sensor data, validation, FHIR, ML results) with automated curl requests to verify backend is working correctly:
+./test_endpoints.sh
+
 ./test_branch_2a.sh
+
 
 //Counts total sensor readings in database
 sudo -u postgres psql -d sleep_monitor -c "SELECT COUNT(*) FROM sensor_readings;"
@@ -26,8 +28,20 @@ curl http://localhost:3000/health
 //Gets last 5 FHIR observations from API
 curl "http://localhost:3000/api/fhir/Observation?_count=5"
 
-Simulates Pi sending sensor data to backend (fake test data)
-curl -X POST http://localhost:3000/api/sensor-data -H "Content-Type: application/json" -d '{"temp":23.5,"hum":48.0,"motion":true,"sound_db":38.0,"deviceid":"pi-test","timestamp":"2024-12-28T23:50:00Z"}'
+Simulates Pi sending sensor data to backend (fake test data):
+
+# Step 1: Get token:
+
+TOKEN=$(curl -s -X POST http://localhost:3000/api/auth/token \
+  -H "Content-Type: application/json" \
+  -d '{"device_id":"pi-test"}' | jq -r '.token')
+
+# Step 2: Send data with token:
+
+curl -X POST http://localhost:3000/api/sensor-data \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $TOKEN" \
+  -d '{"temp":23.5,"hum":48.0,"motion":true,"sound_db":38.0,"deviceid":"pi-test","timestamp":"2024-12-28T23:50:00Z"}'
 
 Check Redis:
 
@@ -72,4 +86,12 @@ Wait for: "Serving HTTP on 0.0.0.0 port 8000"
 
 **Browser:**
 ```
-http://localhost:8000
+http://localhost:3000
+
+
+
+
+
+connecting the sleep_monitor database on wsl:
+sudo -u postgres psql -d sleep_monitor
+

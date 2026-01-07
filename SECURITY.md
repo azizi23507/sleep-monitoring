@@ -6,30 +6,30 @@
 
 ## Current Security Status
 
-### ✅ Implemented Security Features
+### Implemented Security Features
 
 1. **JWT Authentication**
-   - Pi devices must authenticate to send data
-   - Token-based access control
-   - 24-hour token expiration
-   - Signed with JWT_SECRET
+ - Pi devices must authenticate to send data
+ - Token-based access control
+ - 24-hour token expiration
+ - Signed with JWT_SECRET
 
 2. **Input Validation**
-   - Range checks on all sensor values
-   - Type validation via Rust type system
-   - Prevents malformed data
+ - Range checks on all sensor values
+ - Type validation via Rust type system
+ - Prevents malformed data
 
 3. **SQL Injection Prevention**
-   - All queries use parameterized statements (SQLx)
-   - No string concatenation in SQL
-   - Type-safe database queries
+ - All queries use parameterized statements (SQLx)
+ - No string concatenation in SQL
+ - Type-safe database queries
 
 4. **Structured Logging**
-   - All authentication attempts logged
-   - Error tracking with context
-   - Request tracing for debugging
+ - All authentication attempts logged
+ - Error tracking with context
+ - Request tracing for debugging
 
-### ⚠️ Security Warnings - Action Required
+### Security Warnings - Action Required
 
 #### 1. JWT Secret Configuration
 
@@ -98,9 +98,9 @@ Before deploying to production, consider these security improvements:
 ### Critical Security Actions
 
 1. **Change JWT_SECRET** to strong random value (32+ characters)
-   ```bash
-   openssl rand -base64 32
-   ```
+ ```bash
+ openssl rand -base64 32
+ ```
 
 2. **Change database password** from default
 
@@ -162,31 +162,31 @@ RUST_LOG=warn
 
 ```yaml
 services:
-  postgres:
-    environment:
-      POSTGRES_PASSWORD_FILE: /run/secrets/db_password
-    secrets:
-      - db_password
-    restart: always
+ postgres:
+ environment:
+ POSTGRES_PASSWORD_FILE: /run/secrets/db_password
+ secrets:
+ - db_password
+ restart: always
 
-  redis:
-    command: redis-server --requirepass "${REDIS_PASSWORD}"
-    restart: always
+ redis:
+ command: redis-server --requirepass "${REDIS_PASSWORD}"
+ restart: always
 
-  backend:
-    environment:
-      JWT_SECRET_FILE: /run/secrets/jwt_secret
-      RUST_LOG: warn
-    secrets:
-      - jwt_secret
-      - db_password
-    restart: always
+ backend:
+ environment:
+ JWT_SECRET_FILE: /run/secrets/jwt_secret
+ RUST_LOG: warn
+ secrets:
+ - jwt_secret
+ - db_password
+ restart: always
 
 secrets:
-  jwt_secret:
-    external: true
-  db_password:
-    external: true
+ jwt_secret:
+ external: true
+ db_password:
+ external: true
 ```
 
 ---
@@ -249,14 +249,14 @@ GRANT SELECT, INSERT ON fhir_observations TO sleep_app;
 ```bash
 # Pi device gets token once per day
 TOKEN=$(curl -X POST http://api.example.com/api/auth/token \
-  -H "Content-Type: application/json" \
-  -d '{"device_id":"pi-001"}' | jq -r .token)
+ -H "Content-Type: application/json" \
+ -d '{"device_id":"pi-001"}' | jq -r .token)
 
 # Use token for all data submissions
 curl -X POST http://api.example.com/api/sensor-data \
-  -H "Authorization: Bearer $TOKEN" \
-  -H "Content-Type: application/json" \
-  -d '{...}'
+ -H "Authorization: Bearer $TOKEN" \
+ -H "Content-Type: application/json" \
+ -d '{...}'
 ```
 
 ### 5. Monitoring & Alerts
@@ -284,10 +284,10 @@ If you discover a security vulnerability:
 2. **Do NOT** share details publicly
 3. Contact the project maintainers privately
 4. Provide:
-   - Detailed description
-   - Steps to reproduce
-   - Potential impact
-   - Suggested fix (if any)
+ - Detailed description
+ - Steps to reproduce
+ - Potential impact
+ - Suggested fix (if any)
 
 ---
 
@@ -309,7 +309,7 @@ cargo update
 ### System Updates
 
 - PostgreSQL: Follow security advisories
-- Redis: Follow security advisories  
+- Redis: Follow security advisories 
 - Docker images: Use specific versions, update regularly
 
 ---
@@ -320,9 +320,9 @@ cargo update
 
 This system may handle Protected Health Information (PHI). Current implementation provides:
 
-- ✅ Authentication and access controls (JWT)
-- ✅ Input validation and error handling
-- ✅ SQL injection prevention
+- Authentication and access controls (JWT)
+- Input validation and error handling
+- SQL injection prevention
 
 For full HIPAA compliance, additional requirements:
 - Encryption at rest (database)
@@ -338,8 +338,8 @@ For full HIPAA compliance, additional requirements:
 
 For personal data processing, current implementation provides:
 
-- ✅ Data validation and sanitization
-- ✅ Secure data storage
+- Data validation and sanitization
+- Secure data storage
 
 Additional considerations for GDPR:
 - Document data processing activities
@@ -360,5 +360,7 @@ Additional considerations for GDPR:
 
 ---
 
-**Last Updated:** January 7, 2026  
+**Last Updated:** January 7, 2026 
 **Version:** 1.0.0
+
+

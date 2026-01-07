@@ -46,20 +46,20 @@ Core body temperature naturally decreases during sleep as part of the circadian 
 ### Research References
 
 1. **National Sleep Foundation**
-   - Title: "The Best Temperature for Sleep"
-   - Link: https://www.sleepfoundation.org/bedroom-environment/best-temperature-for-sleep
-   - Key Finding: Optimal bedroom temperature is between 60-67°F (15.5-19.5°C)
+ - Title: "The Best Temperature for Sleep"
+ - Link: https://www.sleepfoundation.org/bedroom-environment/best-temperature-for-sleep
+ - Key Finding: Optimal bedroom temperature is between 60-67°F (15.5-19.5°C)
 
 2. **Okamoto-Mizuno, K., & Mizuno, K. (2012)**
-   - Title: "Effects of thermal environment on sleep and circadian rhythm"
-   - Journal: Journal of Physiological Anthropology, 31(1), 14
-   - DOI: 10.1186/1880-6805-31-14
-   - Key Finding: Thermal environment significantly affects sleep stages and sleep quality
+ - Title: "Effects of thermal environment on sleep and circadian rhythm"
+ - Journal: Journal of Physiological Anthropology, 31(1), 14
+ - DOI: 10.1186/1880-6805-31-14
+ - Key Finding: Thermal environment significantly affects sleep stages and sleep quality
 
 3. **Haskell, E. H., et al. (1981)**
-   - Title: "The effects of high and low ambient temperatures on human sleep stages"
-   - Journal: Electroencephalography and Clinical Neurophysiology, 51(5), 494-501
-   - Key Finding: Deviations from thermoneutral zone reduce REM sleep and increase wakefulness
+ - Title: "The effects of high and low ambient temperatures on human sleep stages"
+ - Journal: Electroencephalography and Clinical Neurophysiology, 51(5), 494-501
+ - Key Finding: Deviations from thermoneutral zone reduce REM sleep and increase wakefulness
 
 ---
 
@@ -83,20 +83,20 @@ Proper humidity levels prevent respiratory tract dryness and promote comfortable
 ### Research References
 
 1. **American Academy of Sleep Medicine (AASM)**
-   - Recommendation: Maintain bedroom humidity between 30-50%
-   - Link: https://aasm.org/
-   - Key Finding: Proper humidity improves sleep quality and reduces respiratory issues
+ - Recommendation: Maintain bedroom humidity between 30-50%
+ - Link: https://aasm.org/
+ - Key Finding: Proper humidity improves sleep quality and reduces respiratory issues
 
 2. **Arens, E., & Zhang, H. (2006)**
-   - Title: "The skin's role in human thermoregulation and comfort"
-   - Chapter in: Thermal and Moisture Transport in Fibrous Materials
-   - Key Finding: Relative humidity affects thermal comfort and skin moisture
+ - Title: "The skin's role in human thermoregulation and comfort"
+ - Chapter in: Thermal and Moisture Transport in Fibrous Materials
+ - Key Finding: Relative humidity affects thermal comfort and skin moisture
 
 3. **Wolkoff, P., & Kjaergaard, S. K. (2007)**
-   - Title: "The dichotomy of relative humidity on indoor air quality"
-   - Journal: Environment International, 33(6), 850-857
-   - DOI: 10.1016/j.envint.2007.04.004
-   - Key Finding: 40-60% RH optimal for health and comfort
+ - Title: "The dichotomy of relative humidity on indoor air quality"
+ - Journal: Environment International, 33(6), 850-857
+ - DOI: 10.1016/j.envint.2007.04.004
+ - Key Finding: 40-60% RH optimal for health and comfort
 
 ---
 
@@ -121,27 +121,27 @@ Noise pollution disrupts sleep architecture, particularly REM and deep sleep sta
 ### Research References
 
 1. **World Health Organization (2018)**
-   - Title: "Environmental Noise Guidelines for the European Region"
-   - Link: https://www.who.int/publications/i/item/9789289053563
-   - Key Finding: Night noise levels above 40 dB negatively impact sleep quality
+ - Title: "Environmental Noise Guidelines for the European Region"
+ - Link: https://www.who.int/publications/i/item/9789289053563
+ - Key Finding: Night noise levels above 40 dB negatively impact sleep quality
 
 2. **Basner, M., et al. (2014)**
-   - Title: "Auditory and non-auditory effects of noise on health"
-   - Journal: The Lancet, 383(9925), 1325-1332
-   - DOI: 10.1016/S0140-6736(13)61613-X
-   - Key Finding: Noise-induced sleep fragmentation has cumulative health effects
+ - Title: "Auditory and non-auditory effects of noise on health"
+ - Journal: The Lancet, 383(9925), 1325-1332
+ - DOI: 10.1016/S0140-6736(13)61613-X
+ - Key Finding: Noise-induced sleep fragmentation has cumulative health effects
 
 3. **Hume, K. I., et al. (2012)**
-   - Title: "Effects of environmental noise on sleep"
-   - Journal: Noise and Health, 14(61), 297-302
-   - DOI: 10.4103/1463-1741.104899
-   - Key Finding: Even low-level noise (30-40 dB) can affect sleep quality
+ - Title: "Effects of environmental noise on sleep"
+ - Journal: Noise and Health, 14(61), 297-302
+ - DOI: 10.4103/1463-1741.104899
+ - Key Finding: Even low-level noise (30-40 dB) can affect sleep quality
 
 4. **Muzet, A. (2007)**
-   - Title: "Environmental noise, sleep and health"
-   - Journal: Sleep Medicine Reviews, 11(2), 135-142
-   - DOI: 10.1016/j.smrv.2006.09.001
-   - Key Finding: Noise pollution is a public health concern affecting sleep
+ - Title: "Environmental noise, sleep and health"
+ - Journal: Sleep Medicine Reviews, 11(2), 135-142
+ - DOI: 10.1016/j.smrv.2006.09.001
+ - Key Finding: Noise pollution is a public health concern affecting sleep
 
 ---
 
@@ -165,22 +165,22 @@ Excessive body movements indicate sleep fragmentation, restlessness, or sleep di
 ### Research References
 
 1. **Ancoli-Israel, S., et al. (2003)**
-   - Title: "The role of actigraphy in the study of sleep and circadian rhythms"
-   - Journal: Sleep, 26(3), 342-392
-   - DOI: 10.1093/sleep/26.3.342
-   - Key Finding: Actigraphy is valid method for assessing sleep-wake patterns
+ - Title: "The role of actigraphy in the study of sleep and circadian rhythms"
+ - Journal: Sleep, 26(3), 342-392
+ - DOI: 10.1093/sleep/26.3.342
+ - Key Finding: Actigraphy is valid method for assessing sleep-wake patterns
 
 2. **Sadeh, A. (2011)**
-   - Title: "The role and validity of actigraphy in sleep medicine: an update"
-   - Journal: Sleep Medicine Reviews, 15(4), 259-267
-   - DOI: 10.1016/j.smrv.2010.10.001
-   - Key Finding: Movement patterns correlate with sleep quality
+ - Title: "The role and validity of actigraphy in sleep medicine: an update"
+ - Journal: Sleep Medicine Reviews, 15(4), 259-267
+ - DOI: 10.1016/j.smrv.2010.10.001
+ - Key Finding: Movement patterns correlate with sleep quality
 
 3. **Lichstein, K. L., et al. (2006)**
-   - Title: "Actigraphy validation with insomnia"
-   - Journal: Sleep, 29(2), 232-239
-   - DOI: 10.1093/sleep/29.2.232
-   - Key Finding: Increased movement associated with poorer sleep quality
+ - Title: "Actigraphy validation with insomnia"
+ - Journal: Sleep, 29(2), 232-239
+ - DOI: 10.1093/sleep/29.2.232
+ - Key Finding: Increased movement associated with poorer sleep quality
 
 ---
 
@@ -192,9 +192,9 @@ The ML model calculates sleep quality score using weighted average:
 
 ```
 Total Score = (Temp_Score × 0.30) + 
-              (Humidity_Score × 0.25) + 
-              (Sound_Score × 0.25) + 
-              (Motion_Score × 0.20)
+ (Humidity_Score × 0.25) + 
+ (Sound_Score × 0.25) + 
+ (Motion_Score × 0.20)
 ```
 
 ### Data Aggregation
@@ -267,11 +267,11 @@ Standards may be updated as new research emerges. Current version reflects best 
 ## Version History
 
 - **v1.0 (2024-12):** Initial standards documentation
-  - Temperature: 18-22°C optimal range
-  - Humidity: 40-60% optimal range
-  - Sound: <40 dB optimal range
-  - Motion: Minimal movement standard
-  - Classification: Good (70+) / Poor (<70)
+ - Temperature: 18-22°C optimal range
+ - Humidity: 40-60% optimal range
+ - Sound: <40 dB optimal range
+ - Motion: Minimal movement standard
+ - Classification: Good (70+) / Poor (<70)
 
 ---
 
@@ -282,3 +282,5 @@ For questions about standards or research references, please consult the origina
 ---
 
 **Note:** This is an educational project. Standards are based on published research but implementation is simplified for educational purposes.
+
+
