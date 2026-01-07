@@ -1,5 +1,6 @@
 # Multi-stage build for optimized Rust backend
-FROM rust:1.83 as builder
+# Using nightly for edition2024 support
+FROM rustlang/rust:nightly as builder
 
 WORKDIR /app
 
