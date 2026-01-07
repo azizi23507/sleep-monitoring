@@ -48,5 +48,8 @@ ENV DATABASE_URL=postgres://postgres:password@postgres:5432/sleep_monitor
 ENV REDIS_URL=redis://redis:6379
 ENV JWT_SECRET=docker-default-secret-change-in-production
 
+# Make binary executable
+RUN chmod +x /app/sleep-backend
+
 # Run the application
-CMD ["./sleep-backend"]
+CMD ["/app/sleep-backend"]
