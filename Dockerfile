@@ -17,8 +17,10 @@ COPY backend/src ./src
 COPY backend/migrations ./migrations
 COPY backend/.sqlx ./.sqlx
 
-# Build application
-RUN cargo build --release
+# Build application with offline mode for sqlx
+ENV SQLX_OFFLINE=true
+# Force rebuild of main binary (not just dependencies)
+RUN touch src/main.rs && cargo build --release
 
 # Runtime stage
 FROM debian:bookworm-slim
