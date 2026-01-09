@@ -50,13 +50,11 @@ services:
     environment:
       DATABASE_URL: postgres://postgres:password@postgres:5432/sleep_monitor
       REDIS_URL: redis://redis:6379
-      # SECURITY WARNING: Change JWT_SECRET in production!
-      # Generate secure key: openssl rand -base64 32
       JWT_SECRET: ${JWT_SECRET:-dev-secret-key-for-docker-CHANGE-IN-PRODUCTION}
-      RUST_LOG: info
+      RUST_LOG: debug
       SERVER_HOST: 0.0.0.0
       SERVER_PORT: 3000
-      RUST_BACKTRACE: 1
+      RUST_BACKTRACE: full
     depends_on:
       postgres:
         condition: service_healthy
@@ -64,7 +62,7 @@ services:
         condition: service_healthy
     networks:
       - sleep-network
-    restart: unless-stopped
+    restart: "no"
     tty: true
     stdin_open: true
 
