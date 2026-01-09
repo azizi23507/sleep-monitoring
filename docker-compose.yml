@@ -1,8 +1,9 @@
+version: '3.8'
+
 services:
-  # PostgreSQL Database
   postgres:
     image: postgres:15-alpine
-    container_name: sleep-monitor-db
+    container_name: sleep-db
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
@@ -13,66 +14,39 @@ services:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 10s
-      timeout: 5s
+      interval: 5s
+      timeout: 3s
       retries: 5
-    networks:
-      - sleep-network
 
-  # Redis Cache (No persistence - resets on restart)
   redis:
     image: redis:7-alpine
-    container_name: sleep-monitor-redis
+    container_name: sleep-redis
     ports:
       - "6379:6379"
-    # Note: No volume configured - cache resets on container restart
-    # This is intentional for real-time streaming cache
-    # To enable persistence, uncomment the volumes section below
-    # volumes:
-    #   - redis_data:/data
-    # command: redis-server --appendonly yes
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
-      interval: 10s
-      timeout: 5s
+      interval: 5s
+      timeout: 3s
       retries: 5
-    networks:
-      - sleep-network
 
-  # Rust Backend + Frontend
   backend:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: sleep-monitor-backend
+    container_name: sleep-backend
     ports:
       - "3000:3000"
     environment:
       DATABASE_URL: postgres://postgres:password@postgres:5432/sleep_monitor
       REDIS_URL: redis://redis:6379
-      JWT_SECRET: ${JWT_SECRET:-dev-secret-key-for-docker-CHANGE-IN-PRODUCTION}
-      RUST_LOG: debug
-      SERVER_HOST: 0.0.0.0
-      SERVER_PORT: 3000
-      RUST_BACKTRACE: full
+      JWT_SECRET: dev-secret-key-change-in-production
+      RUST_LOG: info
     depends_on:
       postgres:
         condition: service_healthy
       redis:
         condition: service_healthy
-    networks:
-      - sleep-network
-    restart: "no"
-    tty: true
-    stdin_open: true
+    restart: unless-stopped
 
 volumes:
   postgres_data:
-    driver: local
-  # Uncomment to enable Redis persistence
-  # redis_data:
-  #   driver: local
-
-networks:
-  sleep-network:
-    driver: bridge
