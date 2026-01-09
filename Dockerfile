@@ -47,17 +47,17 @@ COPY backend/migrations ./migrations
 # Copy frontend files
 COPY frontend ./frontend
 
+# Copy entrypoint script
+COPY entrypoint.sh /app/entrypoint.sh
+
+# Make binary and entrypoint executable
+RUN chmod +x /app/sleep-backend /app/entrypoint.sh
+
 # Expose port
 EXPOSE 3000
 
-# Set environment variables (will be overridden by docker-compose)
+# Set environment variables  
 ENV RUST_LOG=info
-ENV DATABASE_URL=postgres://postgres:password@postgres:5432/sleep_monitor
-ENV REDIS_URL=redis://redis:6379
-ENV JWT_SECRET=docker-default-secret-change-in-production
 
-# Make binary executable
-RUN chmod +x /app/sleep-backend
-
-# Run the application
-CMD ["/app/sleep-backend"]
+# Use shell to run entrypoint
+CMD ["/bin/sh", "/app/entrypoint.sh"]

@@ -56,6 +56,7 @@ services:
       RUST_LOG: info
       SERVER_HOST: 0.0.0.0
       SERVER_PORT: 3000
+      RUST_BACKTRACE: 1
     depends_on:
       postgres:
         condition: service_healthy
@@ -64,6 +65,8 @@ services:
     networks:
       - sleep-network
     restart: unless-stopped
+    tty: true
+    stdin_open: true
 
 volumes:
   postgres_data:
