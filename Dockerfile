@@ -28,10 +28,13 @@ RUN cargo build --release
 # Runtime stage - smaller final image
 FROM debian:bookworm-slim
 
-# Install PostgreSQL client and CA certificates
+# Install runtime dependencies including OpenSSL
 RUN apt-get update && \
-    apt-get install -y postgresql-client ca-certificates && \
-    rm -rf /var/lib/apt/lists/*
+    apt-get install -y \
+    postgresql-client \
+    ca-certificates \
+    libssl3 \
+    && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
