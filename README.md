@@ -42,6 +42,10 @@ PostgreSQL → ML Service (External) → Sleep Quality Scores
 ### Option 1: Docker (Recommended)
 
 ```bash
+# Clone repository
+git clone <repository-url>
+cd sleep-monitoring-project
+
 # Start all services
 docker-compose up -d
 
@@ -49,13 +53,15 @@ docker-compose up -d
 # Frontend dashboard at http://localhost:3000/
 ```
 
+⚠️ **Development Setup Notice:**
+This project uses hardcoded credentials (`password`, `dev-secret-key`) for easy local setup and demos. **DO NOT deploy to production without changing secrets!** See `SECURITY.md` for production deployment.
+
 ### Option 2: Local Development
 
 **Prerequisites:**
-- Rust (nightly)
+- Rust (stable)
 - PostgreSQL 15+
 - Redis 7+
-- Node.js (for frontend development)
 
 **Start services:**
 ```bash
@@ -72,22 +78,38 @@ cargo run
 # Frontend served at http://localhost:3000/
 ```
 
+### Option 3: Hardware Setup (Raspberry Pi)
+
+See `hardware/README.md` for complete setup instructions.
+
+**Quick steps:**
+1. Upload `hardware/temps_reel.ino` to Arduino
+2. Connect sensors (DHT11, PIR, Sound)
+3. Update `BACKEND_URL` in `hardware/real_time.py` with your computer's IP
+4. Run: `python3 real_time.py`
+
 ## Project Structure
 
 ```
 sleep-monitoring-project/
-├── backend/ # Rust backend server
-│ ├── src/ # Source code
-│ ├── migrations/ # Database migrations
-│ ├── tests/ # Unit & integration tests
-│ └── README.md # Detailed backend documentation
-├── frontend/ # Web dashboard
-│ ├── index.html # Main dashboard
-│ ├── css/ # Styles
-│ └── js/ # Client-side logic
-├── docker-compose.yml # Docker orchestration
-├── Dockerfile # Backend container
-└── README.md # This file
+├── backend/             # Rust backend server
+│   ├── src/            # Source code
+│   ├── migrations/     # Database migrations
+│   ├── tests/          # Unit & integration tests
+│   └── README.md       # Detailed backend documentation
+├── frontend/           # Web dashboard
+│   ├── index.html      # Main dashboard
+│   ├── css/            # Styles
+│   └── js/             # Client-side logic
+├── hardware/           # Raspberry Pi sensor code
+│   ├── temps_reel.ino  # Arduino sensor reader
+│   ├── real_time.py    # Pi → Backend bridge
+│   └── README.md       # Hardware setup guide
+├── ml/                 # ML service (infrastructure ready)
+│   └── README.md       # ML integration guide
+├── docker-compose.yml  # Docker orchestration
+├── Dockerfile          # Backend container
+└── README.md           # This file
 ```
 
 ## API Endpoints
