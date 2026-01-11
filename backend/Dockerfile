@@ -1,5 +1,5 @@
 # Multi-stage Docker build for Rust backend
-FROM rust:latest as builder
+FROM rust:latest AS builder
 
 WORKDIR /usr/src/app
 

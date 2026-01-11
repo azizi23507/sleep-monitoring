@@ -69,6 +69,14 @@ jobs:
           path: backend/target
           key: ${{ runner.os }}-cargo-build-target-${{ hashFiles('**/Cargo.lock') }}
       
+      - name: Install sqlx-cli
+        run: cargo install sqlx-cli --no-default-features --features postgres
+      
+      - name: Run database migrations
+        run: cd backend && sqlx database create && sqlx migrate run
+        env:
+          DATABASE_URL: postgres://postgres:password@localhost:5432/sleep_monitor
+      
       - name: Check formatting
         run: cd backend && cargo fmt --check
         continue-on-error: true
@@ -142,10 +150,11 @@ jobs:
       - name: Build backend Docker image
         uses: docker/build-push-action@v4
         with:
-          context: ./backend
+          context: .
           file: ./backend/Dockerfile
           push: false
           tags: sleep-backend:test
+          load: true
           cache-from: type=gha
           cache-to: type=gha,mode=max
       
