@@ -73,7 +73,7 @@ jobs:
         run: cargo install sqlx-cli --no-default-features --features postgres
       
       - name: Run database migrations
-        run: cd backend && sqlx database create && sqlx migrate run
+        run: cd backend && sqlx migrate run
         env:
           DATABASE_URL: postgres://postgres:password@localhost:5432/sleep_monitor
       
@@ -159,4 +159,4 @@ jobs:
           cache-to: type=gha,mode=max
       
       - name: Test docker-compose build
-        run: docker-compose build
+        run: docker compose build
