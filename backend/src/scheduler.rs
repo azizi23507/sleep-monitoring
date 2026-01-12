@@ -1,6 +1,7 @@
 use tokio::time::{sleep, Duration};
 use chrono::{Local, Timelike};
 use std::process::Command;
+use tracing as log;
 
 /// ML Analysis Scheduler
 /// 
