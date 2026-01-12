@@ -45,6 +45,13 @@ Arduino sketch that reads sensors and outputs JSON via serial.
 # Click Upload
 ```
 
+### `config.py`
+Configuration file - **EDIT THIS FIRST!**
+```python
+BACKEND_URL = "http://192.168.1.100:3000"  # Change to your computer's IP
+DEVICE_ID = "pi-001"                        # Unique ID for this Pi
+```
+
 ### `real_time.py`
 Python script for Raspberry Pi that:
 1. Reads sensor data from Arduino via serial

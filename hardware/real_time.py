@@ -1,10 +1,9 @@
 import serial, json, time, numpy as np, requests
 from collections import deque
 from datetime import datetime
+from config import BACKEND_URL, DEVICE_ID
 
-# Configuration - Update BACKEND_URL with your computer's IP address
-BACKEND_URL = "http://192.168.137.1:3000"
-DEVICE_ID = "pi-001"
+# Serial port configuration
 SERIAL_PORT = '/dev/ttyACM0'
 BAUD_RATE = 9600
 

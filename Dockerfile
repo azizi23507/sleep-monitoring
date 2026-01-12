@@ -25,9 +25,9 @@ RUN touch src/main.rs && cargo build --release
 # Runtime stage
 FROM debian:bookworm-slim
 
-# Install runtime dependencies
+# Install runtime dependencies including Python
 RUN apt-get update && \
-    apt-get install -y libpq5 ca-certificates libssl3 && \
+    apt-get install -y libpq5 ca-certificates libssl3 python3 python3-pip python3-venv && \
     rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
@@ -40,6 +40,10 @@ COPY frontend ./frontend
 
 # Copy migrations
 COPY backend/migrations ./migrations
+
+# Copy ML script and install Python dependencies
+COPY ml ./ml
+RUN pip3 install --no-cache-dir pandas psycopg2-binary scikit-learn joblib numpy --break-system-packages
 
 EXPOSE 3000
 

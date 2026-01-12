@@ -7,6 +7,7 @@ mod error;
 mod fhir;
 mod models;
 mod routes;
+mod scheduler;
 mod validation;
 mod websocket;
 
@@ -110,6 +111,9 @@ async fn main() {
     let app: Router = routes::build_router(realtime_state, db_pool, broadcast_tx)
         .layer(tower_http::cors::CorsLayer::new().allow_origin(Any));
 
+    // Start ML scheduler (runs daily at 8:00 AM)
+    scheduler::start_ml_scheduler().await;
+
     tracing::info!("");
     tracing::info!("Sleep Monitoring Backend - READY");
     tracing::info!("   Server: http://0.0.0.0:3000");
@@ -118,6 +122,7 @@ async fn main() {
     tracing::info!("   Health: GET /health");
     tracing::info!("   PostgreSQL: Connected");
     tracing::info!("   Redis: Connected");
+    tracing::info!("   ML Scheduler: Running (daily at 08:00)");
     tracing::info!("");
 
     // Bind to port 3000
