@@ -6,8 +6,10 @@ Machine Learning service for analyzing sleep quality based on environmental sens
 
 ## Status
 
-**Infrastructure:** ✅ Ready  
-**Implementation:** 🚧 Pending External Delivery
+**Infrastructure:** Complete  
+**Implementation:** FULLY OPERATIONAL  
+**Model:** Trained Random Forest (`random_forest_sleep_score.pkl`)  
+**Script:** Production-ready Python pipeline (319 lines)
 
 ---
 
@@ -111,43 +113,53 @@ See **ML_CONNECTIVITY_GUIDE.md** in root directory for complete integration inst
 
 ## Implementation Plan
 
-### Phase 1: Data Access (Complete ✅)
-- ✅ Database tables created
-- ✅ API endpoints implemented
-- ✅ Direct database access available
+### Phase 1: Data Access (Complete)
+- Database tables created
+- API endpoints implemented
+- Direct database access available
 
-### Phase 2: ML Model (Pending)
-- [ ] Feature engineering
-- [ ] Model training
-- [ ] Model evaluation
-- [ ] Model deployment
+### Phase 2: ML Model (Complete)
+- Feature engineering (6 features)
+- Model training (Random Forest)
+- Model evaluation and tuning
+- Model deployment (`random_forest_sleep_score.pkl`)
 
-### Phase 3: Analysis Pipeline (Pending)
-- [ ] Scheduled analysis (nightly at 8 AM)
-- [ ] Batch processing
-- [ ] Real-time scoring (optional)
+### Phase 3: Analysis Pipeline (Complete)
+- Scheduled analysis (nightly at 8 AM via backend scheduler)
+- Batch processing (daily historical analysis)
+- Database integration (reads/writes PostgreSQL)
+- Error handling and logging
+- Real-time scoring (optional - not implemented)
 
 ---
 
 ## Requirements
 
-### When Implementing
+### Installed Dependencies
 
 **Python Libraries:**
 ```bash
-pip install psycopg2-binary numpy pandas scikit-learn
+# Already installed in ml/venv
+pip install psycopg2-binary numpy pandas scikit-learn joblib
 ```
 
+**Model Details:**
+- Algorithm: Random Forest Classifier
+- Features: 6 engineered environmental factors
+- Output: Sleep quality score (0-100) + classification
+- File: `random_forest_sleep_score.pkl` (joblib format)
+
 **Analysis Factors:**
-- Temperature (optimal: 18-22°C)
-- Humidity (optimal: 40-60%)
-- Sound level (optimal: <40 dB)
-- Motion events (low = better sleep)
+- Temperature (optimal: 15-19°C, currently measures variance)
+- Humidity (optimal: 30-50%)
+- Sound level (optimal: <30 dB, tracks peaks >70dB)
+- Motion events (optimal: <40 per night)
 
 **Output:**
 - Sleep quality score (0-100)
-- Classification (Good/Fair/Poor)
-- Environmental statistics
+- Classification: "Good" (≥60) or "Poor" (<60)
+- Based on Pittsburgh Sleep Quality Index (PSQI) methodology
+- Environmental statistics (avg temp, humidity, sound, motion count)
 
 ---
 
@@ -298,5 +310,60 @@ For questions about ML integration:
 
 ---
 
-**Status:** Infrastructure ready, awaiting ML implementation  
-**Last Updated:** January 10, 2026
+## Current Implementation
+
+The ML service is **fully operational** with the following components:
+
+### File: `sleep_score_ml.py`
+- 319 lines of production-ready Python code
+- Loads trained Random Forest model from `random_forest_sleep_score.pkl`
+- Connects to PostgreSQL database
+- Reads sensor data for specified date
+- Performs feature engineering (6 features)
+- Predicts sleep quality score
+- Classifies as "Good" or "Poor"
+- Writes results to `sleep_records` table
+- Logs processing status to `ml_processing_log`
+- Comprehensive error handling
+- Scientific documentation
+
+### Scheduling
+The backend Rust service automatically runs this script daily at 8:00 AM using the `scheduler` module.
+
+### Usage
+```bash
+# Manual execution (analyzes yesterday's data)
+cd ml
+source venv/bin/activate  # or .\venv\Scripts\activate on Windows
+python sleep_score_ml.py
+```
+
+**Output Example:**
+```
+Loading trained model...
+Model loaded successfully
+Database connection established
+Analyzing sleep data for pi-001 on 2026-01-11
+Retrieved 8640 sensor readings from database
+
+Feature Summary:
+  Average Temperature: 22.3 C (optimal: 15-19 C)
+  Temperature Variance: 3.2 C (optimal: <2 C)
+  Average Sound: 35.4 dB (optimal: <30 dB)
+  Sound Peaks >70dB: 2 (optimal: 0)
+  Total Motion Events: 45 (optimal: <40 per night)
+  Average Humidity: 48.2% (optimal: 30-50%)
+
+Predicted Sleep Quality Score: 58.7 / 100
+Classification: Poor
+Interpretation: Environmental factors may be disrupting sleep quality
+
+Results written to sleep_records table
+Processing status logged to ml_processing_log table
+Analysis completed successfully
+```
+
+---
+
+**Status:** Fully Operational - All 3 branches complete  
+**Last Updated:** January 12, 2026

@@ -24,13 +24,15 @@ This backend implements a **3-branch architecture** for processing sensor data:
 - **API:** Full FHIR search API with filters
 - **Status:** Fully implemented
 
-### Branch 2B: ML Processing (INFRASTRUCTURE READY)
-- **Path:** Pi → Backend → PostgreSQL → Python ML Service (external) → Results
+### Branch 2B: ML Processing (FULLY IMPLEMENTED)
+- **Path:** Pi → Backend → PostgreSQL → Python ML Service → Results
 - **Purpose:** Sleep quality analysis and classification
-- **Processing:** Nightly batch analysis (not real-time)
+- **Processing:** Nightly batch analysis (daily at 8:00 AM)
+- **Model:** Random Forest classifier (`random_forest_sleep_score.pkl`)
 - **Tables:** `sleep_records`, `ml_processing_log` created
 - **API:** ML results endpoints implemented
-- **Status:** Warning - Backend infrastructure ready, Python ML service pending delivery
+- **Script:** `ml/sleep_score_ml.py` (319 lines, production-ready)
+- **Status:** Fully operational with trained model
 
 ---
 
@@ -113,7 +115,7 @@ This backend implements a **3-branch architecture** for processing sensor data:
 - FHIR Observation resource conversion
 - Event-driven WebSocket (zero-latency updates)
 - Docker deployment configuration
-- ML infrastructure ready (database tables and API endpoints)
+- **ML pipeline fully implemented (Random Forest model with sleep quality prediction)**
 
 ---
 
@@ -255,6 +257,17 @@ Get sleep quality for specific date (YYYY-MM-DD).
 
 ### GET /api/sleep-quality/latest (PUBLIC)
 Get most recent sleep quality analysis.
+
+**Response:**
+```json
+{
+  "date": "2024-12-28",
+  "score": 75,
+  "classification": "Good"
+}
+```
+
+**Note:** ML analysis runs daily at 8:00 AM via scheduled task. Results are based on Random Forest model trained on PSQI (Pittsburgh Sleep Quality Index) methodology.
 
 ---
 
