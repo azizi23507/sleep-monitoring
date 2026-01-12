@@ -67,15 +67,16 @@ while True:
         
         # Convert to backend expected format
         payload = {
-            'device_id': DEVICE_ID,
-            'temperature': data['temp'],
-            'humidity': data['hum'],
-            'sound_level': process_sound(data['sound']),
-            'motion_detected': data['motion']
+            'deviceid': DEVICE_ID,
+            'temp': data['temp'],
+            'hum': data['hum'],
+            'sound_db': process_sound(data['sound']),
+            'motion': data['motion'],
+            'timestamp': datetime.utcnow().isoformat() + 'Z'
         }
 
-        print(f"T:{payload['temperature']:.1f}°C H:{payload['humidity']:.1f}% "
-              f"M:{payload['motion_detected']} S:{payload['sound_level']:.1f}dB", end=" ")
+        print(f"T:{payload['temp']:.1f}°C H:{payload['hum']:.1f}% "
+              f"M:{payload['motion']} S:{payload['sound_db']:.1f}dB", end=" ")
 
         # Send to backend with JWT authentication
         headers = {

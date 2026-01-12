@@ -233,11 +233,13 @@ try:
     # The backend API can query this table to display results to users
     cursor.execute("""
         INSERT INTO sleep_records
-        (device_id, date, sleep_quality_score, classification, 
-         avg_temperature, avg_humidity, avg_sound_level, motion_events, created_at)
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, NOW())
-    """, (DEVICE_ID, analysis_date, predicted_score, classification,
-          avg_temp, avg_humidity, avg_sound, total_motion))
+        (device_id, sleep_date, quality_score, classification, 
+         avg_temperature, avg_humidity, avg_sound_level, motion_events_count,
+         analysis_start, analysis_end, analyzed_at)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, NOW())
+    """, (DEVICE_ID, analysis_date, int(predicted_score), classification,
+          float(avg_temp), float(avg_humidity), float(avg_sound), int(total_motion),
+          analysis_date, analysis_date))  # Using same date for start/end for simplicity
 
     print("Results written to sleep_records table")
 
@@ -249,7 +251,7 @@ try:
     # This provides an audit trail of ML operations for monitoring and debugging
     cursor.execute("""
         INSERT INTO ml_processing_log
-        (device_id, processing_date, status, records_processed, 
+        (device_id, sleep_date, status, readings_processed, 
          started_at, completed_at)
         VALUES (%s, %s, %s, %s, NOW(), NOW())
     """, (DEVICE_ID, analysis_date, status, nb_records))
@@ -286,7 +288,7 @@ except Exception as e:
     try:
         cursor.execute("""
             INSERT INTO ml_processing_log
-            (device_id, processing_date, status, records_processed, 
+            (device_id, sleep_date, status, readings_processed, 
              error_message, started_at, completed_at)
             VALUES (%s, %s, %s, %s, %s, NOW(), NOW())
         """, (DEVICE_ID, analysis_date, "failure", nb_records, error_message))

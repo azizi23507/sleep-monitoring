@@ -3,7 +3,7 @@
 # Mimics Raspberry Pi sending data
 
 BASE_URL="http://localhost:3000/api"
-DEVICE_ID="test-device-pi-simulator"
+DEVICE_ID="pi-001"  # Changed to match ML script
 
 echo "========================================="
 echo "Sensor Data Generator (Pi Simulator)"
@@ -39,7 +39,9 @@ while true; do
     HUMIDITY=$(awk -v min=35 -v max=65 'BEGIN{srand(); print min+rand()*(max-min)}')
     SOUND=$(awk -v min=25 -v max=50 'BEGIN{srand(); print min+rand()*(max-min)}')
     MOTION=$((RANDOM % 2))  # Random 0 or 1
-    TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+    
+    # Use YESTERDAY's date so ML can analyze it immediately
+    TIMESTAMP=$(date -u -d "yesterday" +"%Y-%m-%dT%H:%M:%SZ")
     
     # Send to backend
     RESPONSE=$(curl -s -X POST $BASE_URL/sensor-data \
