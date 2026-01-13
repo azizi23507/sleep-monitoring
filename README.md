@@ -55,7 +55,7 @@ docker-compose up -d
 # Frontend dashboard at http://localhost:3000/
 ```
 
-⚠️ **Development Setup Notice:**
+**Development Setup Notice:**
 This project uses hardcoded credentials (`password`, `dev-secret-key`) for easy local setup and demos. **DO NOT deploy to production without changing secrets!** See `SECURITY.md` for production deployment.
 
 ### Option 2: Local Development

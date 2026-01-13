@@ -54,7 +54,7 @@ while True:
             jwt_token, token_expires_at = get_jwt_token()
         
         if not jwt_token:
-            print("✗ No valid token, retrying in 5s...")
+            print("[ERROR] No valid token, retrying in 5s...")
             time.sleep(5)
             jwt_token, token_expires_at = get_jwt_token()
             continue
@@ -92,16 +92,16 @@ while True:
         )
         
         if response.status_code == 200:
-            print(f"✓ {response.status_code}")
+            print(f"[OK] {response.status_code}")
         else:
-            print(f"✗ {response.status_code}: {response.text}")
+            print(f"[ERROR] {response.status_code}: {response.text}")
 
     except json.JSONDecodeError:
-        print(f"✗ Invalid JSON from Arduino: {line}")
+        print(f"[ERROR] Invalid JSON from Arduino: {line}")
     except requests.exceptions.Timeout:
-        print("✗ Backend timeout")
+        print("[ERROR] Backend timeout")
     except requests.exceptions.ConnectionError:
-        print("✗ Backend connection failed")
+        print("[ERROR] Backend connection failed")
     except Exception as e:
-        print(f"✗ Error: {repr(e)}")
+        print(f"[ERROR] Error: {repr(e)}")
         time.sleep(1)
