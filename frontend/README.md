@@ -306,8 +306,8 @@ Requirements:
 
 ---
 
-**Last Updated:** January 7, 2026 
-**Version:** 1.0.0
+**Last Updated:** January 13, 2026 
+**Version:** 1.1.0 - ML Pipeline Included
 3. Check browser console for API errors
 4. Try manual refresh: `window.app.refreshAnalysis()` in console
 

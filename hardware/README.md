@@ -207,4 +207,5 @@ For issues:
 
 ---
 
-**Last Updated:** January 11, 2026
+**Last Updated:** January 13, 2026  
+**Version:** 1.1.0

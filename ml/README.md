@@ -145,9 +145,10 @@ pip install psycopg2-binary numpy pandas scikit-learn joblib
 
 **Model Details:**
 - Algorithm: Random Forest Classifier
+- Model File: `random_forest_sleep_score.pkl` (787 KB) - **Now in repository**
 - Features: 6 engineered environmental factors
 - Output: Sleep quality score (0-100) + classification
-- File: `random_forest_sleep_score.pkl` (joblib format)
+- Training: Based on PSQI methodology with environmental data
 
 **Analysis Factors:**
 - Temperature (optimal: 15-19°C, currently measures variance)
@@ -366,4 +367,6 @@ Analysis completed successfully
 ---
 
 **Status:** Fully Operational - All 3 branches complete  
-**Last Updated:** January 12, 2026
+**Last Updated:** January 13, 2026  
+**Model:** Random Forest (787 KB)  
+**Script:** `sleep_score_ml.py` (319 lines)

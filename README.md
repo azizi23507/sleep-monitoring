@@ -32,10 +32,12 @@ Raspberry Pi → Backend → PostgreSQL → FHIR API
 
 **Branch 2B: ML Analysis**
 ```
-PostgreSQL → ML Service (External) → Sleep Quality Scores
+PostgreSQL → ML Service (Python) → Sleep Quality Scores
 ```
-- Backend infrastructure ready (database tables, API endpoints)
-- ML service integration pending external delivery
+- **Fully operational** with trained Random Forest model
+- Daily automated analysis at 8:00 AM via backend scheduler
+- Sleep quality scoring based on PSQI methodology
+- Model file: `ml/random_forest_sleep_score.pkl` (787 KB)
 
 ## Quick Start
 
@@ -105,8 +107,11 @@ sleep-monitoring-project/
 │   ├── temps_reel.ino  # Arduino sensor reader
 │   ├── real_time.py    # Pi → Backend bridge
 │   └── README.md       # Hardware setup guide
-├── ml/                 # ML service (infrastructure ready)
-│   └── README.md       # ML integration guide
+├── ml/                 # ML service (fully operational)
+│   ├── sleep_score_ml.py       # ML analysis script (319 lines)
+│   ├── random_forest_sleep_score.pkl  # Trained model (787 KB)
+│   ├── requirements.txt        # Python dependencies
+│   └── README.md              # ML documentation
 ├── docker-compose.yml  # Docker orchestration
 ├── Dockerfile          # Backend container
 └── README.md           # This file
@@ -129,8 +134,8 @@ sleep-monitoring-project/
 
 ### Sleep Quality (ML Results)
 - `GET /api/sleep-records` - Get all sleep records
-- `GET /api/sleep-records/:date` - Get record for specific date
-- `GET /api/sleep-quality/latest` - Get latest analysis
+- `GET /api/sleep-records/:date` - Get record for specific date (format: YYYY-MM-DD)
+- `GET /api/sleep-quality/latest` - Get latest ML analysis with score and classification
 
 ### Health
 - `GET /health` - Server health check
@@ -258,7 +263,9 @@ POSTGRES_PASSWORD=secure-password
 - Structured logging
 - Health check endpoints
 - REST API with authentication
-- ML-ready infrastructure (database tables and API endpoints)
+- **Fully operational ML pipeline** with Random Forest model
+- Automated daily sleep quality analysis
+- PSQI-based sleep scoring methodology
 
 ## License
 
@@ -278,7 +285,7 @@ This is a university project. For questions or issues, refer to the documentatio
 
 ---
 
-**Last Updated:** January 7, 2026 
-**Version:** 1.0.0
+**Last Updated:** January 13, 2026 
+**Version:** 1.1.0 - ML Pipeline Operational
 
 
