@@ -158,6 +158,37 @@ class APIManager {
     async refreshAnalysis() {
         await this.displayLatestQuality();
         await this.displayRecentRecords();
+        await this.displayHeatmap();
+    }
+
+    /**
+     * Display sleep quality heatmap
+     */
+    async displayHeatmap() {
+        const container = document.getElementById('sleep-heatmap');
+        
+        try {
+            // Fetch last 365 days of sleep records
+            const data = await this.getSleepRecords(365);
+            
+            if (data.total === 0) {
+                container.innerHTML = `
+                    <p class="loading">No sleep data available yet for heatmap.</p>
+                    <p class="loading" style="font-size: 0.9rem; margin-top: 10px;">
+                        Start collecting data to see your sleep quality patterns.
+                    </p>
+                `;
+                return;
+            }
+            
+            // Initialize heatmap with data
+            heatmapManager.init(data.records);
+            
+        } catch (error) {
+            container.innerHTML = `
+                <p class="loading">Error loading heatmap.</p>
+            `;
+        }
     }
 }
 

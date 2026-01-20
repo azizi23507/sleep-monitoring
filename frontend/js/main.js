@@ -3,7 +3,7 @@
  * 
  * Coordinates all frontend functionality:
  * - Tab navigation
- * - WebSocket connection and data handling
+ * - SSE connection and data handling
  * - Chart updates
  * - Current value displays
  * - ML analysis data loading
@@ -19,9 +19,9 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeTabs();
 
     // ========================================
-    // WebSocket Connection
+    // SSE Connection
     // ========================================
-    initializeWebSocket();
+    initializeSSE();
 
     // ========================================
     // Charts
@@ -68,9 +68,9 @@ function initializeTabs() {
 }
 
 /**
- * Initialize WebSocket connection
+ * Initialize SSE connection
  */
-function initializeWebSocket() {
+function initializeSSE() {
     const statusIndicator = document.getElementById('status-indicator');
     const statusText = document.getElementById('status-text');
     
@@ -79,21 +79,21 @@ function initializeWebSocket() {
     statusText.textContent = 'Connecting...';
     
     // Handle connection status updates
-    wsManager.onStatus((connected) => {
+    sseManager.onStatus((connected) => {
 
         if (connected) {
             statusIndicator.className = 'status-dot connected';
             statusText.textContent = 'Connected';
-            console.log('[App] WebSocket connected');
+            console.log('[App] SSE connected');
         } else {
             statusIndicator.className = 'status-dot disconnected';
             statusText.textContent = 'Disconnected';
-            console.log('[App] WebSocket disconnected');
+            console.log('[App] SSE disconnected');
         }
     });
 
     // Handle incoming data
-    wsManager.onData((data) => {
+    sseManager.onData((data) => {
         try {
             console.log('[App] Received data:', data.length, 'readings');
 
@@ -108,8 +108,8 @@ function initializeWebSocket() {
     });
 
     // Connect to backend
-    wsManager.connect();
-    console.log('[App] WebSocket connection initiated');
+    sseManager.connect();
+    console.log('[App] SSE connection initiated');
 }
 
 /**
@@ -204,13 +204,13 @@ async function loadAnalysisData() {
  * Cleanup on page unload
  */
 window.addEventListener('beforeunload', () => {
-    wsManager.close();
+    sseManager.close();
     console.log('[App] Cleanup complete');
 });
 
 // Export for debugging in console
 window.app = {
-    wsManager,
+    sseManager,
     chartManager,
     apiManager,
     refreshAnalysis: loadAnalysisData

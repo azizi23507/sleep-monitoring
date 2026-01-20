@@ -548,3 +548,307 @@ code {
         display: block !important;
     }
 }
+
+/* ========================================
+   Sleep Quality Heatmap Calendar
+   ======================================== */
+
+.heatmap-section {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    margin: 30px 0;
+}
+
+.heatmap-container {
+    margin: 20px 0;
+    overflow-x: auto;
+    padding: 10px;
+}
+
+.heatmap-grid {
+    display: grid;
+    grid-template-columns: repeat(13, 1fr);
+    gap: 4px;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.heatmap-month {
+    display: grid;
+    grid-template-rows: auto repeat(7, 1fr);
+    gap: 3px;
+}
+
+.heatmap-month-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #666;
+    text-align: center;
+    margin-bottom: 5px;
+}
+
+.heatmap-day {
+    width: 14px;
+    height: 14px;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    position: relative;
+}
+
+.heatmap-day:hover {
+    transform: scale(1.3);
+    z-index: 10;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.heatmap-day[data-score="none"] {
+    background: #eee;
+}
+
+.heatmap-day[data-score="poor"] {
+    background: #ff6b6b;
+}
+
+.heatmap-day[data-score="fair"] {
+    background: #feca57;
+}
+
+.heatmap-day[data-score="good"] {
+    background: #48dbfb;
+}
+
+.heatmap-day[data-score="excellent"] {
+    background: #1dd1a1;
+}
+
+/* Tooltip */
+.heatmap-tooltip {
+    position: fixed;
+    background: rgba(0, 0, 0, 0.9);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    pointer-events: none;
+    z-index: 1000;
+    white-space: nowrap;
+    display: none;
+}
+
+.heatmap-tooltip.show {
+    display: block;
+}
+
+/* Legend */
+.heatmap-legend {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+
+.legend-label {
+    font-weight: 600;
+    color: #555;
+    font-size: 0.9rem;
+}
+
+.legend-colors {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.85rem;
+    color: #666;
+}
+
+.legend-color {
+    width: 16px;
+    height: 16px;
+    border-radius: 2px;
+    border: 1px solid #ddd;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .heatmap-grid {
+        gap: 2px;
+    }
+    
+    .heatmap-day {
+        width: 10px;
+        height: 10px;
+    }
+    
+    .heatmap-legend {
+        font-size: 0.8rem;
+    }
+}
+
+/* ========================================
+   Heatmap Calendar Styles - 365 Days
+   ======================================== */
+
+.heatmap-section {
+    margin: 20px 0;
+}
+
+.heatmap-container {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    overflow-x: auto;
+}
+
+.heatmap-grid {
+    display: inline-block;
+    font-size: 12px;
+}
+
+.heatmap-months {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 14px;
+    gap: 3px;
+    margin-bottom: 5px;
+    margin-left: 30px;
+}
+
+.heatmap-month-label {
+    font-size: 11px;
+    color: #666;
+}
+
+.heatmap-main {
+    display: flex;
+    gap: 5px;
+}
+
+.heatmap-day-labels {
+    display: grid;
+    grid-template-rows: repeat(7, 12px);
+    gap: 3px;
+    padding-top: 0px;
+    font-size: 10px;
+    color: #666;
+    text-align: right;
+    padding-right: 5px;
+}
+
+.heatmap-cells {
+    display: flex;
+    gap: 3px;
+}
+
+.heatmap-week {
+    display: grid;
+    grid-template-rows: repeat(7, 12px);
+    gap: 3px;
+}
+
+.heatmap-day {
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.heatmap-day:hover {
+    transform: scale(1.5);
+    z-index: 10;
+    position: relative;
+}
+
+.heatmap-day[data-score="none"] {
+    background-color: #ebedf0;
+}
+
+.heatmap-day[data-score="poor"] {
+    background-color: #ff6b6b;
+}
+
+.heatmap-day[data-score="fair"] {
+    background-color: #ffd93d;
+}
+
+.heatmap-day[data-score="good"] {
+    background-color: #6bcf7f;
+}
+
+.heatmap-day[data-score="excellent"] {
+    background-color: #0d9373;
+}
+
+.heatmap-tooltip {
+    position: fixed;
+    background: rgba(0, 0, 0, 0.9);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 12px;
+    pointer-events: none;
+    z-index: 1000;
+    display: none;
+    line-height: 1.4;
+}
+
+.heatmap-legend {
+    margin-top: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 12px;
+    color: #666;
+}
+
+.heatmap-legend span {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.heatmap-legend span::before {
+    content: '';
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
+    display: inline-block;
+}
+
+.heatmap-legend span:nth-child(1)::before { background-color: #ebedf0; }
+.heatmap-legend span:nth-child(2)::before { background-color: #ff6b6b; }
+.heatmap-legend span:nth-child(3)::before { background-color: #ffd93d; }
+.heatmap-legend span:nth-child(4)::before { background-color: #6bcf7f; }
+.heatmap-legend span:nth-child(5)::before { background-color: #0d9373; }
+
+@media (max-width: 768px) {
+    .heatmap-container {
+        overflow-x: scroll;
+    }
+    
+    .heatmap-week {
+        grid-template-rows: repeat(7, 10px);
+    }
+    
+    .heatmap-day {
+        width: 10px;
+        height: 10px;
+    }
+    
+    .heatmap-day-labels {
+        grid-template-rows: repeat(7, 10px);
+        font-size: 9px;
+    }
+}

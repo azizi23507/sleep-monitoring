@@ -1,7 +1,7 @@
 use axum::{Json, extract::State};
 
 use crate::{models::sensor_data::SensorData, validation::sensor::validate_sensor_data};
-use crate::websocket::RealtimeState;
+use crate::sse::RealtimeState;
 use crate::error::{ApiError, ApiResult};
 
 /// Application state shared across all routes
@@ -184,29 +184,7 @@ pub async fn ingest_sensor_data(
             ApiError::Internal(format!("Database error: {}", e))
         })?;
         
-        tracing::debug!("Stored in PostgreSQL successfully with ID: {}", sensor_reading_id);
-        
-        // ========================================
-        // STEP 3.1: FHIR Conversion (Branch 2A)
-        // ========================================
-        // Convert sensor data to FHIR R4 Observation resources
-        // Creates 4 separate observations:
-        // - Temperature (LOINC: CUSTOM-TEMP-001)
-        // - Humidity (LOINC: CUSTOM-HUM-001)
-        // - Sound Level (LOINC: CUSTOM-SOUND-001)
-        // - Motion Detection (LOINC: CUSTOM-MOTION-001)
-        tracing::debug!("Converting to FHIR observations...");
-        
-        let fhir_observations = crate::fhir::convert_to_fhir_observations(&data, sensor_reading_id);
-        
-        // Store FHIR observations in database
-        crate::fhir::store_fhir_observations(&state.db_pool, sensor_reading_id, &fhir_observations)
-            .await?;
-        
-        tracing::info!(
-            "FHIR conversion complete: {} observations created",
-            fhir_observations.len()
-        );
+        tracing::info!("Stored in PostgreSQL successfully with ID: {}", sensor_reading_id);
     }
 
     // ========================================

@@ -3,7 +3,7 @@
 # Mimics Raspberry Pi sending data
 
 BASE_URL="http://localhost:3000/api"
-DEVICE_ID="pi-001"  # Changed to match ML script
+DEVICE_ID="pi-001"
 
 echo "========================================="
 echo "Sensor Data Generator (Pi Simulator)"
@@ -29,7 +29,7 @@ echo ""
 
 # Send random data every 2 seconds
 echo "Starting data stream (Press Ctrl+C to stop)..."
-echo "Sending sensor data every 2 seconds..."
+echo "Sending data for YESTERDAY's sleep window..."
 echo ""
 
 COUNT=1
@@ -38,10 +38,16 @@ while true; do
     TEMP=$(awk -v min=18 -v max=25 'BEGIN{srand(); print min+rand()*(max-min)}')
     HUMIDITY=$(awk -v min=35 -v max=65 'BEGIN{srand(); print min+rand()*(max-min)}')
     SOUND=$(awk -v min=25 -v max=50 'BEGIN{srand(); print min+rand()*(max-min)}')
-    MOTION=$((RANDOM % 2))  # Random 0 or 1
+    MOTION=$((RANDOM % 2))
     
-    # Use YESTERDAY's date so ML can analyze it immediately
-    TIMESTAMP=$(date -u -d "yesterday" +"%Y-%m-%dT%H:%M:%SZ")
+    # Hardcoded yesterday date for testing (adjust if needed)
+    YESTERDAY_DATE="2026-01-18"
+    HOUR=$((20 + RANDOM % 13))
+    if [ $HOUR -ge 24 ]; then
+        HOUR=$((HOUR - 24))
+        YESTERDAY_DATE="2026-01-18"
+    fi
+    TIMESTAMP="${YESTERDAY_DATE}T$(printf %02d $HOUR):$(date +%M:%S)Z"
     
     # Send to backend
     RESPONSE=$(curl -s -X POST $BASE_URL/sensor-data \
@@ -58,7 +64,7 @@ while true; do
     
     # Check response
     if echo "$RESPONSE" | grep -q "ok\|success"; then
-        echo "[$COUNT] Sent: ${TEMP}°C, ${HUMIDITY}%, ${SOUND}dB, Motion: $MOTION ✓"
+        echo "[$COUNT] $TIMESTAMP | ${TEMP}°C, ${HUMIDITY}%, ${SOUND}dB, Motion: $MOTION ✓"
     else
         echo "[$COUNT] ERROR: $RESPONSE"
     fi

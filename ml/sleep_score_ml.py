@@ -38,11 +38,15 @@ from datetime import datetime, date, timedelta
 import os
 DB_CONFIG = {
     'host': os.getenv('DB_HOST', 'localhost'),
-    'port': 5432,
-    'database': 'sleep_monitor',
-    'user': 'postgres',
-    'password': 'password'
+    'port': int(os.getenv('DB_PORT', '5432')),
+    'database': os.getenv('POSTGRES_DB', 'sleep_monitor'),
+    'user': os.getenv('POSTGRES_USER', 'postgres'),
+    'password': os.getenv('POSTGRES_PASSWORD')
 }
+
+# Validate required environment variables
+if not DB_CONFIG['password']:
+    raise ValueError("POSTGRES_PASSWORD environment variable must be set")
 
 # Device identifier for this analysis
 # Each Raspberry Pi device should have a unique ID
@@ -90,43 +94,78 @@ try:
     # STEP 3: READ SENSOR DATA FROM DATABASE
     # ====================================================================================
     
-    # Analyze yesterday's sleep data
-    # We analyze the previous day's complete data to ensure all night readings are captured
+    # Analyze yesterday's sleep data from 20:00 to 08:00 (12-hour window)
+    # Sleep period: 8 PM previous day → 8 AM current day
     analysis_date = date.today() - timedelta(days=1)
     
-    print(f"Analyzing sleep data for {DEVICE_ID} on {analysis_date}")
+    # Define sleep analysis window
+    # Start: 20:00:00 on the analysis date (beginning of sleep period)
+    # End: 08:00:00 the next day (end of typical sleep period)
+    from datetime import datetime
+    sleep_start = datetime.combine(analysis_date, datetime.min.time().replace(hour=20, minute=0, second=0))
+    sleep_end = datetime.combine(analysis_date + timedelta(days=1), datetime.min.time().replace(hour=8, minute=0, second=0))
 
-    # Query to retrieve all sensor readings for the target date
+    print(f"Analyzing sleep data for {DEVICE_ID}")
+    print(f"Sleep window: {sleep_start} to {sleep_end}")
+
+    # Query to retrieve all sensor readings within the sleep window
     # Data is ordered chronologically to preserve time-series patterns
     cursor.execute("""
         SELECT 
+            reading_timestamp,
             temperature,
             humidity,
             sound_level,
             motion_detected
         FROM sensor_readings
         WHERE device_id = %s
-        AND reading_timestamp::date = %s
+        AND reading_timestamp >= %s
+        AND reading_timestamp < %s
         ORDER BY reading_timestamp
-    """, (DEVICE_ID, analysis_date))
+    """, (DEVICE_ID, sleep_start, sleep_end))
 
     rows = cursor.fetchall()
     nb_records = len(rows)
 
-    # Validate that we have sensor data for the specified date
+    # Validate that we have sensor data for the specified sleep window
     if nb_records == 0:
-        raise ValueError(f"No sensor data found for device {DEVICE_ID} on {analysis_date}")
+        raise ValueError(f"No sensor data found for device {DEVICE_ID} in sleep window {sleep_start} to {sleep_end}")
 
     print(f"Retrieved {nb_records} sensor readings from database")
 
     # Convert query results to pandas DataFrame for easier feature engineering
     # Column names match the model's expected input features
     data = pd.DataFrame(rows, columns=[
+        "timestamp",
         "temp_c",
         "humidity",
         "sound_db",
         "motion"
     ])
+    
+    # ====================================================================================
+    # STEP 3.5: CALCULATE SLEEP DURATION
+    # ====================================================================================
+    
+    # Calculate actual sleep duration based on motion patterns
+    # Periods with no motion indicate sleep, excessive motion indicates wakefulness
+    
+    # Simple approach: Calculate duration from first to last reading
+    # More sophisticated: Identify continuous low-motion periods
+    data['timestamp'] = pd.to_datetime(data['timestamp'])
+    
+    # Calculate total time span in hours
+    time_span_hours = (data['timestamp'].max() - data['timestamp'].min()).total_seconds() / 3600
+    
+    # Estimate actual sleep time by subtracting high-activity periods
+    # Motion events indicate wakefulness, reduce sleep time proportionally
+    motion_ratio = data['motion'].sum() / len(data)
+    estimated_sleep_hours = time_span_hours * (1 - motion_ratio * 0.5)  # Reduce by half of motion ratio
+    
+    # Ensure reasonable bounds (minimum 3 hours, maximum 12 hours)
+    sleep_duration_hours = max(3.0, min(12.0, estimated_sleep_hours))
+    
+    print(f"Sleep Duration: {sleep_duration_hours:.2f} hours")
 
     # ====================================================================================
     # STEP 4: FEATURE ENGINEERING
@@ -233,15 +272,73 @@ try:
     # The backend API can query this table to display results to users
     cursor.execute("""
         INSERT INTO sleep_records
-        (device_id, sleep_date, quality_score, classification, 
+        (device_id, sleep_date, sleep_duration_hours, quality_score, classification, 
          avg_temperature, avg_humidity, avg_sound_level, motion_events_count,
          analysis_start, analysis_end, analyzed_at)
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, NOW())
-    """, (DEVICE_ID, analysis_date, int(predicted_score), classification,
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, NOW())
+        RETURNING id
+    """, (DEVICE_ID, analysis_date, float(sleep_duration_hours), int(predicted_score), classification,
           float(avg_temp), float(avg_humidity), float(avg_sound), int(total_motion),
-          analysis_date, analysis_date))  # Using same date for start/end for simplicity
-
-    print("Results written to sleep_records table")
+          sleep_start, sleep_end))
+    
+    sleep_record_id = cursor.fetchone()[0]
+    print(f"Results written to sleep_records table (ID: {sleep_record_id})")
+    
+    # ====================================================================================
+    # STEP 7.5: CREATE FHIR OBSERVATION
+    # ====================================================================================
+    
+    # Create FHIR R4 Observation for sleep duration
+    # This uses the standard LOINC code 93832-4 for sleep duration
+    import json
+    
+    fhir_observation = {
+        "resourceType": "Observation",
+        "id": f"sleep-{sleep_record_id}",
+        "status": "final",
+        "category": [{
+            "coding": [{
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "vital-signs",
+                "display": "Vital Signs"
+            }],
+            "text": "Vital Signs"
+        }],
+        "code": {
+            "coding": [{
+                "system": "http://loinc.org",
+                "code": "93832-4",
+                "display": "Sleep duration"
+            }],
+            "text": "Sleep Duration"
+        },
+        "subject": {
+            "reference": f"Device/{DEVICE_ID}",
+            "display": "Sleep Monitor Subject"
+        },
+        "effectiveDateTime": str(analysis_date),
+        "valueQuantity": {
+            "value": float(sleep_duration_hours),
+            "unit": "h",
+            "system": "http://unitsofmeasure.org",
+            "code": "h"
+        },
+        "device": {
+            "reference": f"Device/{DEVICE_ID}",
+            "display": "Sleep Monitoring System"
+        }
+    }
+    
+    # Store FHIR observation in database
+    cursor.execute("""
+        INSERT INTO fhir_observations
+        (sleep_record_id, resource_type, resource_data, fhir_id, 
+         loinc_code, observation_category)
+        VALUES (%s, %s, %s, %s, %s, %s)
+    """, (sleep_record_id, "Observation", json.dumps(fhir_observation),
+          f"sleep-{sleep_record_id}", "93832-4", "Vital Signs"))
+    
+    print("FHIR observation created with LOINC code 93832-4 (sleep duration)")
 
     # ====================================================================================
     # STEP 8: LOG PROCESSING STATUS

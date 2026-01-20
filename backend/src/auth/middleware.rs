@@ -46,9 +46,9 @@ pub async fn auth_middleware(
     mut req: Request,
     next: Next,
 ) -> Result<Response, (StatusCode, String)> {
-    // Get JWT secret from environment
+    // Get JWT secret from environment (required - no fallback for security)
     let jwt_secret = std::env::var("JWT_SECRET")
-        .unwrap_or_else(|_| "default-secret-change-in-production".to_string());
+        .expect("JWT_SECRET must be set in environment variables");
     
     // Extract token from header
     let token = match extract_token(&headers) {

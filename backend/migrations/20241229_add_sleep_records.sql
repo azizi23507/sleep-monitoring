@@ -15,6 +15,7 @@ CREATE TABLE IF NOT EXISTS sleep_records (
     analysis_end TIMESTAMPTZ NOT NULL,         -- End of analysis period
     
     -- Sleep quality metrics
+    sleep_duration_hours DECIMAL(4, 2) NOT NULL,  -- Total sleep hours (e.g., 7.50)
     quality_score INTEGER NOT NULL,            -- 0-100 score
     classification VARCHAR(20) NOT NULL,       -- "Good" or "Poor"
     

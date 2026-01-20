@@ -1,38 +1,41 @@
 # Sleep Monitoring System - Backend
 
-Rust backend server for non-invasive sleep monitoring system with JWT authentication, FHIR compliance, and real-time streaming.
+Rust backend server for non-invasive sleep monitoring system with JWT authentication, FHIR compliance, Server-Sent Events streaming, and ML-powered analysis.
 
 ## Architecture Overview
 
 This backend implements a **3-branch architecture** for processing sensor data:
 
-### Branch 1: Real-time Streaming (IMPLEMENTED)
-- **Path:** Pi → Backend → Redis Cache → WebSocket → Frontend
-- **Purpose:** Zero-latency live monitoring for healthcare staff
+### Branch 1: Real-time Streaming (IMPLEMENTED - SSE)
+- **Path:** Pi → Backend → Redis Cache → SSE → Frontend
+- **Purpose:** Zero-latency live monitoring with one-way data streaming
+- **Protocol:** Server-Sent Events (lighter than WebSocket)
 - **Storage:** Last 100 readings in Redis (key: "sensor:latest")
 - **TTL:** 2 hours auto-expiry
-- **Update Frequency:** Continuous (1-second WebSocket interval)
-- **Authentication:** WebSocket requires JWT token
+- **Update Frequency:** Sub-second with hybrid approach (instant + periodic sync)
+- **Authentication:** Public endpoint (sensor data submission requires JWT)
+- **Benefits:** Automatic reconnection, simpler protocol, less overhead
 - **Status:** Fully implemented
 
-### Branch 2A: FHIR Conversion (IMPLEMENTED)
-- **Path:** Pi → Backend → PostgreSQL → FHIR Converter → FHIR API
-- **Purpose:** Healthcare interoperability with external hospital systems
-- **Standards:** FHIR R4 Observation resources with LOINC codes
-- **Conversions:** 4 observations per reading (temp, humidity, sound, motion)
+### Branch 2A: FHIR Conversion (IMPLEMENTED - Sleep Duration)
+- **Path:** Pi → Backend → PostgreSQL → ML Analysis → FHIR API
+- **Purpose:** Healthcare interoperability with official LOINC code
+- **Standards:** FHIR R4 Observation with LOINC 93832-4 (Sleep Duration)
+- **Conversions:** 1 observation per sleep analysis (daily)
 - **Storage:** JSONB format in `fhir_observations` table
 - **API:** Full FHIR search API with filters
-- **Status:** Fully implemented
+- **Status:** Fully implemented with standard compliance
 
 ### Branch 2B: ML Processing (FULLY IMPLEMENTED)
-- **Path:** Pi → Backend → PostgreSQL → Python ML Service → Results
-- **Purpose:** Sleep quality analysis and classification
-- **Processing:** Nightly batch analysis (daily at 8:00 AM)
+- **Path:** Pi → Backend → PostgreSQL → Python ML Service → Sleep Records → FHIR
+- **Purpose:** Sleep quality analysis and duration calculation
+- **Processing:** Nightly batch analysis (daily at 8:00 AM, sleep window 20:00-08:00)
 - **Model:** Random Forest classifier (`random_forest_sleep_score.pkl`)
-- **Tables:** `sleep_records`, `ml_processing_log` created
-- **API:** ML results endpoints implemented
-- **Script:** `ml/sleep_score_ml.py` (319 lines, production-ready)
-- **Status:** Fully operational with trained model
+- **Features:** Sleep duration calculation from motion patterns
+- **Tables:** `sleep_records` (with sleep_duration_hours), `ml_processing_log`
+- **API:** ML results endpoints with 90-day limit support for heatmap
+- **Script:** `ml/sleep_score_ml.py` (400+ lines, production-ready)
+- **Status:** Fully operational with trained model and FHIR integration
 
 ---
 

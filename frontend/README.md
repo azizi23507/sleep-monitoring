@@ -1,27 +1,31 @@
 # Sleep Monitoring System - Frontend
 
-Clean, professional web interface for real-time sleep environment monitoring and analysis.
+Clean, professional web interface for real-time sleep environment monitoring, ML-powered analysis, and visual sleep quality tracking.
 
 ---
 
 ## Features
 
 ### 1. Live Dashboard
-- Real-time sensor data visualization
+- Real-time sensor data visualization via Server-Sent Events (SSE)
 - Four environmental metrics: Temperature, Humidity, Sound Level, Motion
 - Current values with optimal range indicators
 - Line charts showing trends (last 100 readings)
-- WebSocket connection for instant updates
+- Automatic reconnection on connection loss
+- Sub-second data updates
 
 ### 2. Sleep Analysis
-- ML-analyzed sleep quality scores
-- Latest sleep quality with classification (Good/Poor)
-- Recent sleep records (last 7 nights)
+- **Sleep Quality Heatmap Calendar** - 90-day visual overview with color-coded quality
+- Latest sleep quality score with classification (Excellent/Good/Fair/Poor)
+- Recent sleep records table (last 7 nights)
 - Environmental statistics for each night
+- Sleep duration tracking (hours)
+- Interactive tooltips with detailed information
 
 ### 3. Standards Reference
 - Scientific standards for sleep quality assessment
 - Detailed scoring criteria for each metric
+- FHIR compliance information (LOINC 93832-4)
 - Research references with links
 - Educational information about sleep environment factors
 
@@ -31,8 +35,9 @@ Clean, professional web interface for real-time sleep environment monitoring and
 
 - **Pure HTML5/CSS3/JavaScript** - No frameworks, lightweight and fast
 - **Chart.js 4.4.0** - Professional data visualization
-- **WebSocket API** - Real-time data streaming
+- **Server-Sent Events (SSE)** - Efficient one-way real-time streaming
 - **Fetch API** - REST API communication
+- **Custom Heatmap** - GitHub-style calendar visualization
 
 ---
 
@@ -41,19 +46,20 @@ Clean, professional web interface for real-time sleep environment monitoring and
 ```
 Frontend (Browser)
  |
- +-- WebSocket Connection (ws://localhost:3000/ws)
+ +-- SSE Connection (http://localhost:3000/events)
  | |
- | +-- Receives: Live sensor data (every second)
+ | +-- Receives: Live sensor data stream
  | +-- Updates: Charts + Current values
+ | +-- Auto-reconnects on failure
  | +-- No authentication required
  |
  +-- REST API Calls (http://localhost:3000/api/)
  |
- +-- GET /api/sleep-records (public)
- +-- GET /api/sleep-quality/latest (public)
+ +-- GET /api/sleep-records?limit=90 (for heatmap)
+ +-- GET /api/sleep-quality/latest (Latest ML score)
+ +-- GET /api/sleep-records?limit=7 (Recent nights)
+ +-- GET /api/fhir/Observation (FHIR sleep duration)
  +-- No authentication required
- +-- GET /sleep-quality/latest (Latest ML score)
- +-- GET /sleep-records?limit=7 (Recent nights)
 ```
 
 ---

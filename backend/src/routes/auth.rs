@@ -60,12 +60,9 @@ pub async fn get_token(
         ));
     }
     
-    // Get JWT secret from environment
+    // Get JWT secret from environment (required - no fallback for security)
     let jwt_secret = std::env::var("JWT_SECRET")
-        .unwrap_or_else(|_| {
-            tracing::warn!("JWT_SECRET not set, using default (INSECURE!)");
-            "default-secret-change-in-production".to_string()
-        });
+        .expect("JWT_SECRET must be set in environment variables");
     
     // Generate token
     let token = create_token(&request.device_id, &jwt_secret)?;

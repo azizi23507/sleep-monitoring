@@ -8,8 +8,8 @@ mod fhir;
 mod models;
 mod routes;
 mod scheduler;
+mod sse;
 mod validation;
-mod websocket;
 
 /// Main entry point for the sleep monitoring backend
 /// 
@@ -23,6 +23,11 @@ mod websocket;
 /// Server runs on: http://0.0.0.0:3000
 #[tokio::main]
 async fn main() {
+    // Load environment variables from .env file (if present)
+    // This allows `cargo run` to work without manually exporting variables
+    // In Docker, environment variables are already set via docker-compose
+    dotenvy::dotenv().ok();
+    
     // Initialize tracing subscriber for structured logging
     // This enables logs with different levels (trace, debug, info, warn, error)
     // Set log level via RUST_LOG environment variable:
@@ -45,7 +50,7 @@ async fn main() {
     // PostgreSQL Connection (Branch 2)
     // ========================================
     let database_url = std::env::var("DATABASE_URL")
-        .unwrap_or_else(|_| "postgres://postgres:password@localhost/sleep_monitor".to_string());
+        .expect("DATABASE_URL environment variable must be set");
     
     tracing::info!("Connecting to PostgreSQL...");
     
@@ -90,7 +95,7 @@ async fn main() {
     tracing::info!("Connecting to Redis at: {}", redis_url);
     
     // Initialize real-time state with Redis connection (Branch 1)
-    let realtime_state = match websocket::RealtimeState::new(&redis_url).await {
+    let realtime_state = match sse::RealtimeState::new(&redis_url).await {
         Ok(state) => {
             tracing::info!("Redis connected successfully");
             state
@@ -117,7 +122,7 @@ async fn main() {
     tracing::info!("");
     tracing::info!("Sleep Monitoring Backend - READY");
     tracing::info!("   Server: http://0.0.0.0:3000");
-    tracing::info!("   WebSocket: ws://0.0.0.0:3000/ws");
+    tracing::info!("   SSE Stream: http://0.0.0.0:3000/events");
     tracing::info!("   API: POST /api/sensor-data");
     tracing::info!("   Health: GET /health");
     tracing::info!("   PostgreSQL: Connected");

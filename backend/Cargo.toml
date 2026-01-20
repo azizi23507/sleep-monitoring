@@ -5,10 +5,13 @@ edition = "2021"
 
 [dependencies]
 # Web framework - async HTTP server with routing and middleware
-axum = { version = "0.7", features = ["ws"] }
+axum = "0.7"
 
 # Async runtime - provides async/await support and task scheduling
 tokio = { version = "1.0", features = ["full"] }
+
+# Async utilities - for stream processing in SSE
+futures = "0.3"
 
 # Serialization - convert Rust structs to/from JSON
 serde = { version = "1.0", features = ["derive"] }
@@ -36,5 +39,8 @@ uuid = { version = "1.0", features = ["serde", "v4"] }
 
 # Authentication - JWT token generation and validation
 jsonwebtoken = "9.0"
+
+# Environment variables - load .env file automatically
+dotenvy = "0.15"
 
 # Future dependencies (commented out for now):

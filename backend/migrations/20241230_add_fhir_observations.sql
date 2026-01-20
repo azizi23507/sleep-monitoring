@@ -1,12 +1,12 @@
 -- Add fhir_observations table for Branch 2A
--- Stores FHIR R4 Observation resources converted from sensor readings
+-- Stores FHIR R4 Observation resources for sleep duration
 
 CREATE TABLE IF NOT EXISTS fhir_observations (
     -- Primary key
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     
-    -- Link to original sensor reading
-    sensor_reading_id UUID NOT NULL REFERENCES sensor_readings(id) ON DELETE CASCADE,
+    -- Link to sleep record
+    sleep_record_id UUID NOT NULL REFERENCES sleep_records(id) ON DELETE CASCADE,
     
     -- FHIR resource data (JSON format)
     resource_type VARCHAR(50) NOT NULL DEFAULT 'Observation',
@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS fhir_observations (
     patient_id VARCHAR(100),                   -- Patient reference
     
     -- LOINC codes for categorization
-    loinc_code VARCHAR(20),                    -- e.g., "8310-5" for body temp
+    loinc_code VARCHAR(20),                    -- e.g., "93832-4" for sleep duration
     observation_category VARCHAR(50),          -- e.g., "vital-signs"
     
     -- Metadata
@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS fhir_observations (
 CREATE INDEX IF NOT EXISTS idx_fhir_obs_fhir_id ON fhir_observations(fhir_id);
 CREATE INDEX IF NOT EXISTS idx_fhir_obs_patient ON fhir_observations(patient_id);
 CREATE INDEX IF NOT EXISTS idx_fhir_obs_loinc ON fhir_observations(loinc_code);
-CREATE INDEX IF NOT EXISTS idx_fhir_obs_sensor_reading ON fhir_observations(sensor_reading_id);
+CREATE INDEX IF NOT EXISTS idx_fhir_obs_sleep_record ON fhir_observations(sleep_record_id);
 
 -- Add comment
-COMMENT ON TABLE fhir_observations IS 'FHIR R4 Observation resources for healthcare interoperability (Branch 2A)';
+COMMENT ON TABLE fhir_observations IS 'FHIR R4 Observation resources for sleep duration (LOINC: 93832-4) - Branch 2A';
