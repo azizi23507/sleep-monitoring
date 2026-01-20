@@ -34,18 +34,18 @@ echo ""
 
 COUNT=1
 while true; do
-    # Generate random sensor data
-    TEMP=$(awk -v min=18 -v max=25 'BEGIN{srand(); print min+rand()*(max-min)}')
-    HUMIDITY=$(awk -v min=35 -v max=65 'BEGIN{srand(); print min+rand()*(max-min)}')
-    SOUND=$(awk -v min=25 -v max=50 'BEGIN{srand(); print min+rand()*(max-min)}')
-    MOTION=$((RANDOM % 2))
+    # Generate BAD sensor data (poor sleep)
+TEMP=$(awk -v min=26 -v max=30 'BEGIN{srand(); print min+rand()*(max-min)}')
+HUMIDITY=$(awk -v min=70 -v max=85 'BEGIN{srand(); print min+rand()*(max-min)}')
+SOUND=$(awk -v min=60 -v max=80 'BEGIN{srand(); print min+rand()*(max-min)}')
+MOTION=1
     
     # Hardcoded yesterday date for testing (adjust if needed)
-    YESTERDAY_DATE="2026-01-18"
+    YESTERDAY_DATE="2026-01-06"
     HOUR=$((20 + RANDOM % 13))
     if [ $HOUR -ge 24 ]; then
         HOUR=$((HOUR - 24))
-        YESTERDAY_DATE="2026-01-18"
+        YESTERDAY_DATE="2026-01-07"
     fi
     TIMESTAMP="${YESTERDAY_DATE}T$(printf %02d $HOUR):$(date +%M:%S)Z"
     

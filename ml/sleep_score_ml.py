@@ -80,7 +80,7 @@ try:
     model = joblib.load(model_path)
     print(f"Model loaded successfully from {model_path}")
 
-    # ====================================================================================
+    # ==================================F==================================================
     # STEP 2: ESTABLISH DATABASE CONNECTION
     # ====================================================================================
     
@@ -96,8 +96,8 @@ try:
     
     # Analyze yesterday's sleep data from 20:00 to 08:00 (12-hour window)
     # Sleep period: 8 PM previous day → 8 AM current day
-    analysis_date = date.today() - timedelta(days=1)
-    
+    #analysis_date = date.today() - timedelta(days=1)
+    analysis_date = date(2026, 1, 6)
     # Define sleep analysis window
     # Start: 20:00:00 on the analysis date (beginning of sleep period)
     # End: 08:00:00 the next day (end of typical sleep period)
